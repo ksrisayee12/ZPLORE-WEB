@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Root Variables (matches reference exactly) ─── */
+:root {
+  --background: 0 0% 2%;
+  --foreground: 0 0% 96%;
+  --card: 0 0% 4%;
+  --card-foreground: 0 0% 96%;
+  --popover: 0 0% 4%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 0 0% 96%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 8%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 60%;
+  --accent: 0 0% 12%;
+  --accent-foreground: 0 0% 96%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 12%;
+  --input: 0 0% 12%;
+  --ring: 0 0% 60%;
+  --radius: 0px;
+}
+
+/* ─── Base Reset ─── */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: #050505;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* ─── Display Font (Instrument Serif italic) ─── */
+/* Used on all large headings: h1, h2, h3 with .display class */
+.display {
+  font-family: 'Instrument Serif', ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ─── Grain Texture ─── */
+/* Noise film grain overlay on body */
+.grain::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 9999;
+  animation: grain-shift 8s steps(1) infinite;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-2%, -3%); }
+  20%  { transform: translate(1%, 2%); }
+  30%  { transform: translate(3%, -1%); }
+  40%  { transform: translate(-1%, 3%); }
+  50%  { transform: translate(2%, 1%); }
+  60%  { transform: translate(-3%, 2%); }
+  70%  { transform: translate(1%, -2%); }
+  80%  { transform: translate(-2%, 1%); }
+  90%  { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ─── Glassmorphism ─── */
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ─── Underline Draw Animation ─── */
+/* Used on nav links — underline draws left to right on hover */
+.underline-draw {
+  position: relative;
+  text-decoration: none;
+}
+
+.underline-draw::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.underline-draw:hover::after {
+  width: 100%;
+}
+
+/* ─── Char Spans (GSAP SplitText target) ─── */
+.char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ─── Pin Spacer (GSAP ScrollTrigger) ─── */
+/* Matches the reference pin-spacer behavior */
+.pin-spacer {
+  display: block;
+  overflow: visible;
+}
+
+/* ─── Canvas fill ─── */
+canvas {
+  display: block;
+}
+
+/* ─── SVG overflow correction ─── */
+svg {
+  overflow: visible;
+}
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Layered 3D Studio Cube ─── */
+.studio-cube {
+  transform-style: preserve-3d;
+}
+
+/* ─── Service node pulse animation ─── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.pulse {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ─── Network edge animation ─── */
+@keyframes dash-draw {
+  from { stroke-dashoffset: 500; }
+  to { stroke-dashoffset: 0; }
+}
+
+.edge {
+  animation: dash-draw 1.5s ease forwards;
+}
+
+/* ─── Mobile menu overlay ─── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #050505;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.mobile-menu.open {
+  transform: translateX(0%);
+}
+
+/* ─── Contact form focus ─── */
+.form-input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 12px 0;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.form-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Project card hover border glow ─── */
+.project-card {
+  transition: border-color 0.4s;
+}
+
+.project-card:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ─── Svc node active states ─── */
+.svc-node {
+  transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+  will-change: transform;
+}
+
+/* ─── About stats counter ─── */
+.stat-number {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+}
+
+/* ─── Text balance ─── */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ─── Responsive utility overrides ─── */
+@media (max-width: 767px) {
+  .display {
+    line-height: 0.92;
+  }
+}
