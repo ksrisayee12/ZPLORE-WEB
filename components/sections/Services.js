@@ -2,11 +2,11 @@
 import { useEffect, useRef } from 'react'
 
 const STEPS = [
-  { n: '01', title: 'Discovery', body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.' },
-  { n: '02', title: 'Architecture', body: 'System design, model selection, infra plan, threat model. Documented, decisioned, dated.' },
-  { n: '03', title: 'Build', body: 'Senior engineers shipping in your repo, your cadence, your standards. Weekly demos, never decks.' },
-  { n: '04', title: 'Ship', body: 'Hardening, instrumentation, rollout. We sit with on-call rotations through the first incident.' },
-  { n: '05', title: 'Compound', body: 'Quarterly evolution. New capabilities, model refreshes, scale gates. The system gets sharper with age.' },
+  { n: '01', title: 'Problem Research', body: 'We study real technical friction before writing code. The goal is to define what is broken, who feels it, and what a useful product must prove.' },
+  { n: '02', title: 'Product Validation', body: 'We build small working versions under real conditions. The point is to test the product, not decorate an idea.' },
+  { n: '03', title: 'System Architecture', body: 'We design for scale, security, integration, and long-term operation before the product grows around weak assumptions.' },
+  { n: '04', title: 'Enterprise Adaptation', body: 'We adapt existing Zplore IP to enterprise environments, giving teams product depth without starting from zero.' },
+  { n: '05', title: 'Deployment & Iteration', body: 'We ship, monitor, harden, and improve continuously. A product is not finished when it launches; it is finished when it holds up.' },
 ]
 
 export default function Services() {
