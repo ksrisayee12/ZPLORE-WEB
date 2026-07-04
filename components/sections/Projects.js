@@ -9,6 +9,11 @@ const PROJECTS = [
   { id: 'sadt', name: 'Secure Audio Data Transfer', tag: 'Crypto · Acoustic', desc: 'Encrypted, air-gapped data transfer via acoustic modulation. Verified at 28 kbps over ultrasonic carriers.', size: 'md' },
 ]
 
+const svgNumber = (value) => {
+  const rounded = Math.abs(value) < 0.0001 ? 0 : value
+  return rounded.toFixed(4).replace(/\.?0+$/, '')
+}
+
 export default function Projects() {
   return (
     <section id="projects" className="relative w-full bg-[#050505] py-32 md:py-40">
@@ -104,7 +109,10 @@ function ProjectVisual({ id }) {
       return (
         <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
           <g stroke="white" strokeWidth="1" fill="none" opacity="0.6">
-            {Array.from({length: 24}).map((_,i)=>(<rect key={i} x={40 + i*22} y={100 + Math.sin(i*0.5)*40} width="10" height={200 - Math.sin(i*0.5)*60} />))}
+            {Array.from({length: 24}).map((_,i) => {
+              const wave = Math.sin(i * 0.5)
+              return <rect key={i} x={40 + i*22} y={svgNumber(100 + wave * 40)} width="10" height={svgNumber(200 - wave * 60)} />
+            })}
           </g>
         </svg>
       )
@@ -129,15 +137,19 @@ function ProjectVisual({ id }) {
           </g>
         </svg>
       )
-    case 'sadt':
+    case 'sadt': {
+      const primaryPath = 'M 0 200 ' + Array.from({length: 60}).map((_,i)=>`L ${i*10} ${svgNumber(200 + Math.sin(i*0.6)*Math.cos(i*0.2)*70)}`).join(' ')
+      const secondaryPath = 'M 0 220 ' + Array.from({length: 60}).map((_,i)=>`L ${i*10} ${svgNumber(220 + Math.sin(i*0.4)*50)}`).join(' ')
+
       return (
         <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
           <g stroke="white" strokeWidth="1" fill="none" opacity="0.7">
-            <path d={'M 0 200 ' + Array.from({length: 60}).map((_,i)=>`L ${i*10} ${200 + Math.sin(i*0.6)*Math.cos(i*0.2)*70}`).join(' ')} />
-            <path d={'M 0 220 ' + Array.from({length: 60}).map((_,i)=>`L ${i*10} ${220 + Math.sin(i*0.4)*50}`).join(' ')} opacity="0.4"/>
+            <path d={primaryPath} />
+            <path d={secondaryPath} opacity="0.4"/>
           </g>
         </svg>
       )
+    }
     default: return null
   }
 }
