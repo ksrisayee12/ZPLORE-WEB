@@ -21,17 +21,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 const panels = [
   {
-    label: '01 — Practice',
+    label: '01 PRACTICE',
     title: 'A studio built around frontier engineering.',
     body: 'We work in small, senior teams across AI, security, and systems design. No middle layers, no slide-decks. Just the people who ship.',
   },
   {
-    label: '02 — Method',
+    label: '02 METHOD',
     title: 'Research, then artifact.',
     body: 'Every engagement begins with a working prototype within two weeks. Reality is the only design review that matters.',
   },
   {
-    label: '03 — Belief',
+    label: '03 BELIEF',
     title: 'Software should feel inevitable.',
     body: 'We obsess over the seams. Latency, motion, error states, the moment a model recovers. The boring parts are the brand.',
   },
@@ -119,7 +119,7 @@ export default function Studio() {
         <div className="mx-auto max-w-[1400px] w-full px-6 md:px-10 grid md:grid-cols-12 gap-12 items-center">
           {/* Left: Text Panels */}
           <div className="md:col-span-6 relative h-[60vh] md:h-[70vh]">
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 absolute -top-2 left-0">
+            <div className="text-sm uppercase tracking-[0.3em] text-white/40 absolute -top-2 left-0 font-semibold">
               The Studio
             </div>
 
@@ -135,13 +135,15 @@ export default function Studio() {
                     transform: i === 0 ? 'translate(0,0)' : 'translate(0,60px)',
                   }}
                 >
-                  <div className="text-xs tracking-[0.2em] uppercase text-white/40 mb-6">
-                    {panel.label}
+                  <div className="text-sm tracking-[0.2em] uppercase text-white/40 mb-6 font-medium">
+                    <span className="text-base font-semibold tracking-[0.15em] text-white/60">
+                      {panel.label}
+                    </span>
                   </div>
-                  <h2 className="display text-5xl md:text-7xl text-balance">
+                  <h2 className="premium-serif premium-serif-medium text-6xl md:text-8xl lg:text-9xl text-balance leading-[0.9]">
                     {panel.title}
                   </h2>
-                  <p className="mt-6 text-white/60 text-lg max-w-lg leading-relaxed">
+                  <p className="mt-8 premium-serif premium-serif-light text-xl md:text-2xl text-white/60 max-w-xl leading-relaxed">
                     {panel.body}
                   </p>
                 </div>
