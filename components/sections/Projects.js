@@ -260,3 +260,4 @@ function ProjectVisual({ id }) {
       return null;
   }
 }
+

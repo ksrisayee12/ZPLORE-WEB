@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -24,7 +24,64 @@ body {
   letter-spacing: -0.01em;
 }
 
-.serif { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; }
+.serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+
+/* Premium classic typography */
+.premium-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.premium-serif-bold { font-weight: 600; }
+.premium-serif-light { font-weight: 300; }
+.premium-serif-medium { font-weight: 500; }
+.premium-serif-semibold { font-weight: 600; }
+
+/* Project card premium animations */
+.project-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.project-card > div:first-child {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Smooth layer transitions */
+.project-card:hover > div:first-child {
+  filter: brightness(1.15) contrast(1.1);
+}
+
+/* Staggered layer reveal */
+.layer-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: layerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes layerReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium focus states */
+.project-card:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -1px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 /* Lenis smooth scroll */
 html.lenis, html.lenis body { height: auto; }
