@@ -1,231 +1,216 @@
-'use client';
+'use client'
+import { useEffect, useRef } from 'react'
+import * as THREE from 'three'
 
-import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+function makeSprite() {
+  const size = 128
+  const c = document.createElement('canvas')
+  c.width = c.height = size
+  const g = c.getContext('2d')
+  const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2)
+  grad.addColorStop(0, 'rgba(255,255,255,1)')
+  grad.addColorStop(0.25, 'rgba(255,255,255,0.7)')
+  grad.addColorStop(0.55, 'rgba(255,255,255,0.15)')
+  grad.addColorStop(1, 'rgba(255,255,255,0)')
+  g.fillStyle = grad
+  g.fillRect(0, 0, size, size)
+  return new THREE.CanvasTexture(c)
+}
 
-/**
- * HeroScene — Three.js r185 particle field reconstruction.
- *
- * The original used a 9.4 MB compiled bundle. This faithfully
- * reconstructs the visual: a dark space with floating white particles
- * connected by faint lines, slowly rotating — consistent with the
- * "intelligence systems" brand theme.
- *
- * Reconstruction confidence: HIGH (visual match from canvas snapshot)
- */
+function createField(count) {
+  const positions = new Float32Array(count * 3)
+  const originals = new Float32Array(count * 3)
+
+  for (let i = 0; i < count; i++) {
+    const phi = Math.acos(2 * Math.random() - 1)
+    const theta = Math.random() * Math.PI * 2
+    const r = 2.2 + Math.sin(theta * 3 + phi * 2) * 0.7 + (Math.random() - 0.5) * 0.6
+    const jitter = (Math.random() - 0.5) * 0.4
+    const x = Math.sin(phi) * Math.cos(theta) * r + jitter
+    const y = Math.cos(phi) * r * 0.7 + (Math.random() - 0.5) * 0.6
+    const z = Math.sin(phi) * Math.sin(theta) * r + jitter
+
+    positions[i * 3] = x
+    positions[i * 3 + 1] = y
+    positions[i * 3 + 2] = z
+    originals[i * 3] = x
+    originals[i * 3 + 1] = y
+    originals[i * 3 + 2] = z
+  }
+
+  return { positions, originals }
+}
+
+function createLines(originals, count, segments) {
+  const linePositions = new Float32Array(segments * 6)
+
+  for (let i = 0; i < segments; i++) {
+    const a = Math.floor(Math.random() * count)
+    const ax = originals[a * 3]
+    const ay = originals[a * 3 + 1]
+    const az = originals[a * 3 + 2]
+    let bestB = a
+    let bestD = Infinity
+
+    for (let k = 0; k < 12; k++) {
+      const b = Math.floor(Math.random() * count)
+      const dx = originals[b * 3] - ax
+      const dy = originals[b * 3 + 1] - ay
+      const dz = originals[b * 3 + 2] - az
+      const d = dx * dx + dy * dy + dz * dz
+      if (d < bestD && d > 0.01) {
+        bestD = d
+        bestB = b
+      }
+    }
+
+    linePositions[i * 6] = ax
+    linePositions[i * 6 + 1] = ay
+    linePositions[i * 6 + 2] = az
+    linePositions[i * 6 + 3] = originals[bestB * 3]
+    linePositions[i * 6 + 4] = originals[bestB * 3 + 1]
+    linePositions[i * 6 + 5] = originals[bestB * 3 + 2]
+  }
+
+  return linePositions
+}
+
 export default function HeroScene() {
-  const mountRef = useRef(null);
+  const canvasRef = useRef(null)
 
   useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    /* ── Renderer ── */
+    const count = 5200
     const renderer = new THREE.WebGLRenderer({
+      canvas,
       antialias: true,
-      alpha: false,
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(mount.clientWidth, mount.clientHeight);
-    renderer.setClearColor(0x050505, 1);
-    mount.appendChild(renderer.domElement);
+      alpha: true,
+      powerPreference: 'high-performance',
+    })
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100)
+    const mouse = { x: 0, y: 0 }
+    const start = performance.now()
+    const sprite = makeSprite()
+    const { positions, originals } = createField(count)
 
-    /* ── Scene & Camera ── */
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      mount.clientWidth / mount.clientHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 28;
+    scene.background = new THREE.Color('#050505')
+    scene.fog = new THREE.Fog('#050505', 5, 14)
+    camera.position.set(0, 0, 9)
 
-    /* ── Particles ── */
-    const PARTICLE_COUNT = 600;
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const sizes = new Float32Array(PARTICLE_COUNT);
-    const spread = 40;
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      positions[i * 3 + 0] = (Math.random() - 0.5) * spread;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * spread * 0.6;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * spread * 0.6;
-      sizes[i] = Math.random() * 1.5 + 0.5;
-    }
-
-    const particleGeo = new THREE.BufferGeometry();
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-    const particleMat = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.08,
+    const glowGeometry = new THREE.BufferGeometry()
+    glowGeometry.setAttribute('position', new THREE.BufferAttribute(positions.slice(), 3))
+    const glowMaterial = new THREE.PointsMaterial({
+      size: 0.16,
+      map: sprite,
+      color: '#ffffff',
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.35,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
       sizeAttenuation: true,
-    });
+    })
+    const glowPoints = new THREE.Points(glowGeometry, glowMaterial)
 
-    const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
+    const pointGeometry = new THREE.BufferGeometry()
+    pointGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    const pointMaterial = new THREE.PointsMaterial({
+      size: 0.04,
+      map: sprite,
+      color: '#ffffff',
+      transparent: true,
+      opacity: 0.95,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    })
+    const points = new THREE.Points(pointGeometry, pointMaterial)
 
-    /* ── Connection lines ── */
-    // Build a line mesh connecting nearby particles
-    const linePositions = [];
-    const maxDist = 8;
+    const lineGeometry = new THREE.BufferGeometry()
+    lineGeometry.setAttribute('position', new THREE.BufferAttribute(createLines(originals, count, 380), 3))
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: '#ffffff',
+      transparent: true,
+      opacity: 0.09,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+    const lines = new THREE.LineSegments(lineGeometry, lineMaterial)
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const ax = positions[i * 3];
-      const ay = positions[i * 3 + 1];
-      const az = positions[i * 3 + 2];
+    scene.add(glowPoints, points, lines)
 
-      for (let j = i + 1; j < PARTICLE_COUNT; j++) {
-        const bx = positions[j * 3];
-        const by = positions[j * 3 + 1];
-        const bz = positions[j * 3 + 2];
-        const dist = Math.sqrt(
-          (ax - bx) ** 2 + (ay - by) ** 2 + (az - bz) ** 2
-        );
-        if (dist < maxDist) {
-          linePositions.push(ax, ay, az, bx, by, bz);
-        }
-      }
+    const resize = () => {
+      const width = canvas.clientWidth || window.innerWidth
+      const height = canvas.clientHeight || window.innerHeight
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6))
+      renderer.setSize(width, height, false)
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
     }
 
-    const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(linePositions, 3)
-    );
+    const handleMove = (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+      mouse.y = -((e.clientY / window.innerHeight) * 2 - 1)
+    }
 
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.06,
-    });
+    let frameId
+    let last = performance.now()
+    const animate = (now) => {
+      const elapsed = (now - start) / 1000
+      const delta = (now - last) / 1000
+      last = now
 
-    const lineSegments = new THREE.LineSegments(lineGeo, lineMat);
-    scene.add(lineSegments);
-
-    /* ── Central rotating ring group ── */
-    const ringGroup = new THREE.Group();
-
-    const torusGeo1 = new THREE.TorusGeometry(6, 0.01, 8, 80);
-    const torusMat = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.08,
-    });
-
-    const ring1 = new THREE.Mesh(torusGeo1, torusMat);
-    ring1.rotation.x = Math.PI / 3;
-    ringGroup.add(ring1);
-
-    const torusGeo2 = new THREE.TorusGeometry(9, 0.008, 8, 80);
-    const ring2 = new THREE.Mesh(torusGeo2, torusMat.clone());
-    ring2.rotation.x = -Math.PI / 5;
-    ring2.rotation.y = Math.PI / 4;
-    ringGroup.add(ring2);
-
-    const torusGeo3 = new THREE.TorusGeometry(12, 0.006, 8, 80);
-    const ring3 = new THREE.Mesh(torusGeo3, torusMat.clone());
-    ring3.rotation.x = Math.PI / 6;
-    ring3.rotation.z = Math.PI / 3;
-    ringGroup.add(ring3);
-
-    scene.add(ringGroup);
-
-    /* ── Mouse parallax ── */
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const handleMouseMove = (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    /* ── Resize ── */
-    const handleResize = () => {
-      if (!mount) return;
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', handleResize);
-
-    /* ── Animation loop ── */
-    let frameId;
-    const clock = new THREE.Clock();
-
-    const animate = () => {
-      frameId = requestAnimationFrame(animate);
-      const elapsed = clock.getElapsedTime();
-
-      // Smooth mouse follow
-      targetX += (mouseX - targetX) * 0.02;
-      targetY += (mouseY - targetY) * 0.02;
-
-      // Slow rotation of entire particle field
-      particles.rotation.y = elapsed * 0.012;
-      particles.rotation.x = elapsed * 0.005;
-
-      // Ring counter-rotation
-      ringGroup.rotation.y = elapsed * 0.04 + targetX * 0.3;
-      ringGroup.rotation.x = elapsed * 0.02 + targetY * 0.2;
-
-      // Lines follow particles
-      lineSegments.rotation.y = particles.rotation.y;
-      lineSegments.rotation.x = particles.rotation.x;
-
-      // Camera subtle parallax
-      camera.position.x += (targetX * 2 - camera.position.x) * 0.04;
-      camera.position.y += (targetY * 1.5 - camera.position.y) * 0.04;
-
-      // Breathe effect on particle opacity
-      particleMat.opacity = 0.45 + Math.sin(elapsed * 0.5) * 0.1;
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    /* ── Cleanup ── */
-    return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
-
-      // Dispose
-      particleGeo.dispose();
-      particleMat.dispose();
-      lineGeo.dispose();
-      lineMat.dispose();
-      torusGeo1.dispose();
-      torusGeo2.dispose();
-      torusGeo3.dispose();
-      torusMat.dispose();
-      renderer.dispose();
-
-      if (mount && renderer.domElement.parentNode === mount) {
-        mount.removeChild(renderer.domElement);
+      const arr = pointGeometry.attributes.position.array
+      for (let i = 0; i < count; i++) {
+        const ox = originals[i * 3]
+        const oy = originals[i * 3 + 1]
+        const oz = originals[i * 3 + 2]
+        arr[i * 3] = ox + Math.sin(elapsed * 0.5 + i * 0.013) * 0.08
+        arr[i * 3 + 1] = oy + Math.cos(elapsed * 0.4 + i * 0.009) * 0.1
+        arr[i * 3 + 2] = oz + Math.sin(elapsed * 0.45 + i * 0.011) * 0.08
       }
-    };
-  }, []);
+      pointGeometry.attributes.position.needsUpdate = true
+      glowGeometry.attributes.position.array.set(arr)
+      glowGeometry.attributes.position.needsUpdate = true
 
-  return (
-    <div
-      ref={mountRef}
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-        pointerEvents: 'auto',
-      }}
-    />
-  );
+      points.rotation.y += (mouse.x * 0.5 - points.rotation.y) * 0.04
+      points.rotation.x += (mouse.y * 0.25 - points.rotation.x) * 0.04
+      points.rotation.z += delta * 0.015
+      glowPoints.rotation.copy(points.rotation)
+      lines.rotation.copy(points.rotation)
+
+      const intro = Math.min(1, elapsed / 3.2)
+      const ease = 1 - Math.pow(1 - intro, 3)
+      camera.position.x = Math.sin(elapsed * 0.08) * 0.5
+      camera.position.y = Math.cos(elapsed * 0.06) * 0.25
+      camera.position.z = 9 - ease * 3
+      camera.lookAt(0, 0, 0)
+
+      renderer.render(scene, camera)
+      frameId = requestAnimationFrame(animate)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+    window.addEventListener('mousemove', handleMove, { passive: true })
+    frameId = requestAnimationFrame(animate)
+
+    return () => {
+      cancelAnimationFrame(frameId)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', handleMove)
+      glowGeometry.dispose()
+      pointGeometry.dispose()
+      lineGeometry.dispose()
+      glowMaterial.dispose()
+      pointMaterial.dispose()
+      lineMaterial.dispose()
+      sprite.dispose()
+      renderer.dispose()
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} className="block h-full w-full" />
 }

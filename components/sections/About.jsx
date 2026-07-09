@@ -1,118 +1,119 @@
-'use client';
+'use client'
+import { useEffect, useRef } from 'react'
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-/**
- * About Section — reconstructed from reference DOM patterns.
- * The about section appears after Enterprise in page.js.
- *
- * Structure (inferred from layout patterns):
- * - Full-width section with large text stat blocks
- * - Team philosophy paragraph
- * - Metrics grid (4 numbers)
- */
-
-const stats = [
-  { value: '8+', label: 'Years engineering frontier systems' },
-  { value: '40+', label: 'Shipped production systems' },
-  { value: '100%', label: 'Senior-only team. No juniors.' },
-  { value: '2wk', label: 'First prototype guaranteed' },
-];
+const BEATS = [
+  { stat: '2021', label: 'Founded', text: 'Started as a two-person research collective.' },
+  { stat: '14', label: 'Engineers', text: 'Senior-only. No outsourcing, no agencies-of-record.' },
+  { stat: '32', label: 'Shipped systems', text: 'From silent acoustic transports to agent operating layers.' },
+  { stat: '∞', label: 'Curiosity', text: 'Research is part of payroll. Half-days for unsupervised exploration, every week.' },
+]
 
 export default function About() {
-  const sectionRef = useRef(null);
+  const ref = useRef(null)
+  const zRef = useRef(null)
+  const textRefs = useRef([])
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.about-stat',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 75%',
-          },
-        }
-      );
+    let cleanup
+    ; (async () => {
+      const { default: gsap } = await import('gsap')
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+      const ctx = gsap.context(() => {
+        // pin and progress
+        const total = BEATS.length
+        const st = ScrollTrigger.create({
+          trigger: ref.current,
+          start: 'top top',
+          end: '+=' + (total * 100) + '%',
+          pin: true,
+          scrub: 0.6,
+          onUpdate: (s) => {
+            const p = s.progress
+            // drive Z geometry build
+            const segments = zRef.current.querySelectorAll('path.zseg, line.zseg, polygon.zface')
+            segments.forEach((el, i) => {
+              const start = i / segments.length
+              const end = (i + 1) / segments.length
+              const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
+              el.setAttribute('opacity', (local * 0.95).toFixed(3))
+              if (el.dataset && el.dataset.length) {
+                const L = parseFloat(el.dataset.length)
+                el.setAttribute('stroke-dashoffset', (L * (1 - local)).toFixed(2))
+              }
+            })
+            // rotate Z group
+            const g = zRef.current.querySelector('g.zgroup')
+            if (g) g.setAttribute('transform', `translate(250 250) rotate(${p * 60}) translate(-250 -250)`)
+            // text beats
+            textRefs.current.forEach((t, i) => {
+              if (!t) return
+              const start = i / total
+              const end = (i + 1) / total
+              const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
+              const fadeIn = gsap.utils.clamp(0, 1, local * 3)
+              const fadeOut = i === total - 1 ? 1 : gsap.utils.clamp(0, 1, 1 - (local - 0.75) * 4)
+              t.style.opacity = (fadeIn * fadeOut).toString()
+              t.style.transform = `translateY(${(1 - fadeIn) * 40}px)`
+            })
+          }
+        })
+      }, ref)
+      cleanup = () => ctx.revert()
+    })()
+    return () => cleanup && cleanup()
+  }, [])
 
-      gsap.fromTo(
-        '.about-text-block > *',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  // Build a Z made of stacked stroked segments + facets
+  const segs = []
+  const facets = []
+  const lineLen = 320
+  // top bar, diagonal, bottom bar, repeated stacked to look 3D
+  for (let z = 0; z < 6; z++) {
+    const off = z * 6
+    segs.push({ d: `M ${100 + off} ${100 + off} L ${420 + off} ${100 + off}`, len: lineLen })
+    segs.push({ d: `M ${420 + off} ${100 + off} L ${100 + off} ${420 + off}`, len: 460 })
+    segs.push({ d: `M ${100 + off} ${420 + off} L ${420 + off} ${420 + off}`, len: lineLen })
+  }
+  // a couple of facets connecting layers
+  for (let z = 0; z < 5; z++) {
+    const off = z * 6
+    facets.push(`${100 + off},${100 + off} ${420 + off},${100 + off} ${426 + off},${106 + off} ${106 + off},${106 + off}`)
+    facets.push(`${100 + off},${420 + off} ${420 + off},${420 + off} ${426 + off},${426 + off} ${106 + off},${426 + off}`)
+  }
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative w-full bg-[#050505] py-32 md:py-44 overflow-hidden"
-    >
-      {/* Subtle horizontal rule */}
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <div className="h-px bg-white/10 mb-16" />
-
-        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-          {/* Left — who we are */}
-          <div className="md:col-span-5 about-text-block">
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-6">
-              About — 008
-            </div>
-            <h2 className="display text-5xl md:text-7xl mb-8">
-              A small team that ships big things.
-            </h2>
-            <p className="text-white/60 text-lg leading-relaxed max-w-md mb-6">
-              Zplore is a deep-tech engineering studio headquartered in Bengaluru.
-              We are not a consultancy. We are builders who sit inside the problem
-              until it is solved.
-            </p>
-            <p className="text-white/40 text-base leading-relaxed max-w-md">
-              Every project begins with a two-week discovery sprint and ends only
-              when the system is in production and performing as specified. No
-              handoffs. No decks. Just working software.
-            </p>
-          </div>
-
-          {/* Right — stats */}
-          <div className="md:col-span-7 grid grid-cols-2 gap-8 md:gap-12 content-start">
-            {stats.map((stat, i) => (
-              <div key={i} className="about-stat" style={{ opacity: 0 }}>
-                <div className="display text-6xl md:text-8xl text-white/90 leading-none mb-3">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-white/40 leading-relaxed">
-                  {stat.label}
-                </div>
+    <section id="about" ref={ref} className="relative w-full h-screen bg-[#050505] overflow-hidden">
+      <div className="absolute inset-0 grid md:grid-cols-2">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute top-10 left-10 text-xs uppercase tracking-[0.3em] text-white/40">About — 008</div>
+          <svg ref={zRef} viewBox="0 0 500 500" className="w-[80%] aspect-square">
+            <g className="zgroup" transform="translate(250 250) rotate(0) translate(-250 -250)">
+              {facets.map((pts, i) => (
+                <polygon key={'f' + i} className="zface" points={pts} fill="white" fillOpacity="0.04" stroke="white" strokeOpacity="0.2" strokeWidth="0.5" opacity="0" />
+              ))}
+              {segs.map((s, i) => (
+                <path key={'s' + i} className="zseg" d={s.d} stroke="white" strokeWidth={i < 3 ? 2 : 1} fill="none" data-length={s.len} strokeDasharray={s.len} strokeDashoffset={s.len} opacity="0" strokeLinecap="square" />
+              ))}
+            </g>
+          </svg>
+        </div>
+        <div className="relative flex items-center justify-center px-10">
+          <div className="relative w-full max-w-md h-[60vh]">
+            {BEATS.map((b, i) => (
+              <div key={i} ref={el => (textRefs.current[i] = el)} className="absolute inset-0 flex flex-col justify-center" style={{ opacity: i === 0 ? 1 : 0 }}>
+                <div className="display text-[18vw] md:text-[10vw] leading-none">{b.stat}</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-white/40 mt-4">{b.label}</div>
+                <p className="mt-6 text-white/60 text-lg leading-relaxed max-w-sm">{b.text}</p>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Bottom divider */}
-        <div className="h-px bg-white/10 mt-24" />
+      </div>
+      <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-[1400px] px-6 md:px-10 flex justify-between text-[10px] uppercase tracking-[0.3em] text-white/30">
+        <span>Z — a five-year unfolding</span>
+        <span>Scroll to unfold</span>
       </div>
     </section>
-  );
+  )
 }
