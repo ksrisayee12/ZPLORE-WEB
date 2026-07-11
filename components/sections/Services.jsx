@@ -17,35 +17,15 @@ gsap.registerPlugin(ScrollTrigger);
  */
 
 const steps = [
-  {
-    num: '01',
-    title: 'Discovery',
-    body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.',
-  },
-  {
-    num: '02',
-    title: 'Architecture',
-    body: 'System design, model selection, infra plan, threat model. Documented, decisioned, dated.',
-  },
-  {
-    num: '03',
-    title: 'Build',
-    body: 'Senior engineers shipping in your repo, your cadence, your standards. Weekly demos, never decks.',
-  },
-  {
-    num: '04',
-    title: 'Ship',
-    body: 'Hardening, instrumentation, rollout. We sit with on-call rotations through the first incident.',
-  },
-  {
-    num: '05',
-    title: 'Compound',
-    body: 'Quarterly evolution. New capabilities, model refreshes, scale gates. The system gets sharper with age.',
-  },
+  { num: '01', title: 'Discovery Sprint', body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.' },
+  { num: '02', title: 'System Architecture', body: 'System design, model selection, infra plan, threat model. Documented, decisioned, dated.' },
+  { num: '03', title: 'Embedded Build', body: 'Senior engineers shipping in your repo, your cadence, your standards. Weekly demos, never decks.' },
+  { num: '04', title: 'Production Ship', body: 'Hardening, instrumentation, rollout. We sit with on-call rotations through the first incident.' },
+  { num: '05', title: 'Compound Evolution', body: 'Quarterly evolution. New capabilities, model refreshes, scale gates. The system gets sharper with age.' },
 ];
 
 /* Build SVG sine path (matches reference wavy line) */
-function buildSinePath(width = 4400, height = 160, cy = 80) {
+function buildSinePath(width = 2800, height = 160, cy = 80) {
   const points = [];
   const step = 10;
   for (let x = 0; x <= width; x += step) {
@@ -74,7 +54,7 @@ export default function Services() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: `+=${totalWidth * 1.3}`,
+          end: `+=${totalWidth * 0.85}`,
           pin: true,
           scrub: 1.2,
           anticipatePin: 1,
@@ -140,12 +120,9 @@ export default function Services() {
         <div className="mx-auto max-w-[1400px] px-6 md:px-10 flex items-end justify-between">
           <div>
             <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">
-              How we work — 006
+              How we work
             </div>
             <h2 className="display text-5xl md:text-7xl">Services.</h2>
-          </div>
-          <div className="hidden md:block text-sm text-white/50 max-w-xs text-right">
-            Scroll →
           </div>
         </div>
       </div>
@@ -197,14 +174,28 @@ export default function Services() {
 
                 <h3 className="display text-4xl md:text-5xl mt-8">{step.title}</h3>
 
-                <p className="mt-4 text-white/60 text-base leading-relaxed max-w-md">
+                {step.subtitle && (
+                  <div className="mt-3 text-white/90 text-lg font-medium font-inter">{step.subtitle}</div>
+                )}
+
+                <p className="mt-4 font-inter text-white/60 text-base leading-relaxed max-w-md">
                   {step.body}
                 </p>
 
-                <div className="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/40">
-                  <span className="w-8 h-px bg-white/40" />
-                  phase {step.num}
-                </div>
+                {step.buttonText ? (
+                  <div className="mt-8">
+                    <a
+                      href={step.buttonHref}
+                      className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors"
+                    >
+                      {step.buttonText} →
+                    </a>
+                  </div>
+                ) : (
+                  <div className="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/40">
+                    phase {step.num}
+                  </div>
+                )}
               </div>
 
               {/* Timeline dot */}

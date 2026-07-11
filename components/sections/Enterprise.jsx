@@ -123,7 +123,7 @@ export default function Enterprise() {
           {/* Left — text */}
           <div className="md:col-span-4 enterprise-text">
             <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4">
-              Enterprise — 007
+              Enterprise
             </div>
             <h2 className="display text-5xl md:text-7xl mb-8">
               Built for scale, designed for trust.

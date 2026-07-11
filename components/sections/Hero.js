@@ -31,37 +31,44 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-10 pt-[28vh] md:pt-[26vh]">
-        <div className="flex items-center gap-3 mb-8 text-xs uppercase tracking-[0.3em] text-white/50">
-          <span className="w-8 h-px bg-white/40" /> Zplore · Studio 002
-        </div>
-        <h1 ref={headingRef} className="display text-[14vw] md:text-[8.5vw] leading-[0.9]">
+        <h1 ref={headingRef} className="font-clash-display text-[14vw] md:text-[8.5vw] leading-[0.95] tracking-tight">
           {headline.map((line, i) => (
-            <div key={i} className="overflow-hidden">
-              <div className="inline-block">
-                {line.split('').map((c, j) => (
-                  <span key={j} className="char inline-block" style={{ whiteSpace: c === ' ' ? 'pre' : 'normal' }}>{c}</span>
-                ))}
-              </div>
+            <div key={i} className="overflow-hidden py-3 -my-3">
+              {i === 1 ? (
+                <div className="inline-block">
+                  {'the '.split('').map((c, j) => (
+                    <span key={`t-${j}`} className="char inline-block not-italic font-clash-display" style={{ whiteSpace: c === ' ' ? 'pre' : 'normal' }}>{c}</span>
+                  ))}
+                  <span className="serif italic font-normal inline-block">
+                    {'next decade'.split('').map((c, j) => (
+                      <span key={`n-${j}`} className="char inline-block" style={{ whiteSpace: c === ' ' ? 'pre' : 'normal' }}>{c}</span>
+                    ))}
+                  </span>
+                </div>
+              ) : (
+                <div className="inline-block">
+                  {line.split('').map((c, j) => (
+                    <span key={j} className="char inline-block" style={{ whiteSpace: c === ' ' ? 'pre' : 'normal' }}>{c}</span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </h1>
         <div ref={subRef} className="mt-10 grid md:grid-cols-12 gap-6 items-end">
-          <p className="md:col-span-5 text-white/60 text-base md:text-lg max-w-md">
-            We design and ship deep-tech systems — frontier AI, secure infrastructure, and intelligent products — for the companies defining what comes next.
+          <p className="md:col-span-8 font-gambarino text-white/70 text-2xl md:text-3xl leading-relaxed max-w-4xl">
+            We design and ship deep-tech systems across frontier AI,<br className="hidden md:inline" />
+            secure infrastructure, and intelligent products for the companies defining what comes next.
           </p>
-          <div className="md:col-span-5 md:col-start-8 flex items-center gap-6">
-            <a href="#projects" className="group inline-flex items-center gap-3 text-sm border border-white/20 hover:border-white px-5 py-3 transition-colors">
-              <span>View work</span><span className="transition-transform group-hover:translate-x-1">→</span>
+          <div className="md:col-span-4 flex items-center md:justify-end gap-6">
+            <a href="#projects" className="group inline-flex items-center text-sm border border-white/20 hover:border-white px-7 py-3 rounded-full transition-colors text-white font-excon tracking-wide">
+              <span>View work</span>
             </a>
-            <a href="#contact" className="text-sm underline-draw text-white/80">Start a project</a>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-0 right-0 z-10 mx-auto max-w-[1400px] px-6 md:px-10 flex items-end justify-between text-[10px] uppercase tracking-[0.3em] text-white/40">
-        <div>Scroll ↓</div>
-        <div className="hidden md:block">N 12.97° · E 77.59° / Bengaluru</div>
-        <div>v2026.06</div>
+      <div className="absolute bottom-8 left-0 right-0 z-10 mx-auto max-w-[1400px] px-6 md:px-10 flex items-end justify-end text-[10px] uppercase tracking-[0.3em] text-white/40">
       </div>
     </section>
   )

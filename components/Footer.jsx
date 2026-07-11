@@ -77,7 +77,6 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="py-6 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[11px] text-white/30 tracking-wide">
           <div>© {year} Zplore Technologies Pvt. Ltd. All rights reserved.</div>
-          <div className="hidden md:block">N 12.97° · E 77.59° / Bengaluru, India</div>
           <div>Built with precision. v2026.06</div>
         </div>
       </div>

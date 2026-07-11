@@ -28,7 +28,14 @@ export default function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const navLinks = ['Studio', 'Projects', 'Services', 'Enterprise', 'About', 'Community', 'Contact'];
+  const navLinks = [
+    { label: 'What we do', id: 'studio' },
+    { label: 'Products', id: 'projects' },
+    { label: 'Services', id: 'services' },
+    { label: 'Enterprise', id: 'enterprise' },
+    { label: 'About', id: 'about' },
+    { label: 'Explore Community', id: 'community' },
+  ];
 
   const scrollTo = (id) => {
     setMenuOpen(false);
@@ -67,26 +74,29 @@ export default function Header() {
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
+              {navLinks.slice(0, 5).map((link) => (
                 <button
-                  key={link}
-                  onClick={() => scrollTo(link)}
-                  className="text-[13px] text-white/70 hover:text-white transition-colors underline-draw cursor-pointer"
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="text-[15px] text-white/80 hover:text-white transition-colors underline-draw cursor-pointer font-bricolage"
                 >
-                  {link}
+                  {link.label}
                 </button>
               ))}
+              <a
+                href="#community"
+                className="text-[15px] text-white/80 hover:text-white transition-colors underline-draw cursor-pointer border border-white/20 hover:border-white px-4 py-2 font-bricolage"
+              >
+                Explore Community
+              </a>
             </nav>
 
             {/* CTA Button */}
             <button
               onClick={() => scrollTo('contact')}
-              className="hidden md:inline-flex group items-center gap-2 border border-white/15 hover:border-white/40 px-4 py-2 text-[12px] tracking-wide transition-colors text-white"
+              className="hidden md:inline-flex group items-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-2.5 rounded-full text-[14px] font-medium transition-all font-playfair"
             >
               <span>Start a project</span>
-              <span className="inline-block translate-x-0 group-hover:translate-x-1 transition-transform">
-                →
-              </span>
             </button>
 
             {/* Mobile Hamburger */}
@@ -114,22 +124,28 @@ export default function Header() {
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <div className="flex flex-col h-full px-6 pt-24 pb-12">
           <nav className="flex flex-col gap-6">
-            {navLinks.map((link) => (
+            {navLinks.slice(0, 5).map((link) => (
               <button
-                key={link}
-                onClick={() => scrollTo(link)}
-                className="display text-5xl text-white/80 hover:text-white transition-colors text-left"
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="display text-4xl text-white/80 hover:text-white transition-colors text-left font-bricolage"
               >
-                {link}
+                {link.label}
               </button>
             ))}
+            <a
+              href="#community"
+              className="display text-4xl text-white/80 hover:text-white transition-colors text-left border border-white/20 px-4 py-2 font-bricolage"
+            >
+              Explore Community
+            </a>
           </nav>
           <div className="mt-auto">
             <button
               onClick={() => scrollTo('contact')}
-              className="inline-flex items-center gap-2 border border-white/20 px-5 py-3 text-sm text-white transition-colors hover:border-white/40"
+              className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 px-7 py-3 rounded-full text-base font-medium transition-all font-playfair"
             >
-              Start a project →
+              Start a project
             </button>
           </div>
         </div>

@@ -86,7 +86,7 @@ export default function About() {
     <section id="about" ref={ref} className="relative w-full h-screen bg-[#050505] overflow-hidden">
       <div className="absolute inset-0 grid md:grid-cols-2">
         <div className="relative flex items-center justify-center">
-          <div className="absolute top-10 left-10 text-xs uppercase tracking-[0.3em] text-white/40">About — 008</div>
+          <div className="absolute top-10 left-10 text-xs uppercase tracking-[0.3em] text-white/40">About</div>
           <svg ref={zRef} viewBox="0 0 500 500" className="w-[80%] aspect-square">
             <g className="zgroup" transform="translate(250 250) rotate(0) translate(-250 -250)">
               {facets.map((pts, i) => (
@@ -104,7 +104,7 @@ export default function About() {
               <div key={i} ref={el => (textRefs.current[i] = el)} className="absolute inset-0 flex flex-col justify-center" style={{ opacity: i === 0 ? 1 : 0 }}>
                 <div className="display text-[18vw] md:text-[10vw] leading-none">{b.stat}</div>
                 <div className="text-xs uppercase tracking-[0.3em] text-white/40 mt-4">{b.label}</div>
-                <p className="mt-6 text-white/60 text-lg leading-relaxed max-w-sm">{b.text}</p>
+                <p className="mt-6 font-general-sans text-white/60 text-lg leading-relaxed max-w-sm">{b.text}</p>
               </div>
             ))}
           </div>
@@ -112,7 +112,6 @@ export default function About() {
       </div>
       <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-[1400px] px-6 md:px-10 flex justify-between text-[10px] uppercase tracking-[0.3em] text-white/30">
         <span>Z — a five-year unfolding</span>
-        <span>Scroll to unfold</span>
       </div>
     </section>
   )

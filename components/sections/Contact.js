@@ -59,26 +59,25 @@ export default function Contact() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.05), transparent 50%)' }} />
       </div>
       <div className="relative mx-auto max-w-[1100px] px-6 md:px-10">
-        <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4">Contact — 009</div>
-        <h2 className="display text-6xl md:text-8xl leading-[0.9] text-balance">Tell us what<br /><span className="serif italic text-white/80">you're building.</span></h2>
-        <p className="text-white/55 mt-6 max-w-md">We reply within one business day. Engineering office hours: Mon–Fri, 09:00–19:00 IST.</p>
+        <h2 className="font-clash-display-medium text-6xl md:text-8xl leading-[0.9] text-balance">Tell us what<br /><span className="serif italic text-white/80">you're building.</span></h2>
+        <p className="font-general-sans text-white/55 mt-6 max-w-md">We reply within one business day.</p>
 
         {submitted ? (
           <div className="mt-16 border border-white/10 p-10">
             <div className="display text-3xl md:text-4xl">Transmission received.</div>
-            <p className="text-white/60 mt-3">A senior engineer will be in touch within 24 hours.</p>
+            <p className="font-general-sans text-white/60 mt-3">A senior engineer will be in touch within 24 hours.</p>
           </div>
         ) : (
           <form onSubmit={submit} className="mt-16 grid md:grid-cols-2 gap-x-12 gap-y-10">
             <Field label="Name" name="name" focusName={focusName} setFocusName={setFocusName} required />
             <Field label="Email" name="email" type="email" focusName={focusName} setFocusName={setFocusName} required />
-            <Field label="Company" name="company" focusName={focusName} setFocusName={setFocusName} />
-            <Field label="Budget (USD)" name="budget" focusName={focusName} setFocusName={setFocusName} placeholder="50k – 250k+" />
+            <div className="md:col-span-2">
+              <Field label="Company" name="company" focusName={focusName} setFocusName={setFocusName} />
+            </div>
             <div className="md:col-span-2">
               <Field label="Tell us about the project" name="message" textarea focusName={focusName} setFocusName={setFocusName} required />
             </div>
-            <div className="md:col-span-2 flex items-center justify-between mt-4">
-              <div className="text-xs text-white/40">By submitting you agree to our minimal, anonymized intake policy.</div>
+            <div className="md:col-span-2 flex items-center justify-end mt-4">
               <button ref={btnRef} type="submit" className="magnetic group relative inline-flex items-center gap-3 border border-white/30 hover:border-white px-8 py-4 text-sm tracking-wider uppercase transition-colors">
                 <span>Send transmission</span>
                 <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -103,7 +102,7 @@ function Field({ label, name, type = 'text', focusName, setFocusName, required, 
   }
   return (
     <label className="block relative">
-      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">{label}</span>
+      <span className="font-boska-bold text-lg md:text-xl text-white/90">{label}</span>
       <div className="relative mt-2">
         {textarea ? (
           <textarea rows={4} {...common} />

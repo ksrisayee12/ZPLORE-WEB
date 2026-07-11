@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -9,15 +9,14 @@ gsap.registerPlugin(ScrollTrigger);
 /* ── Noise texture SVG for card grain overlay ── */
 const NOISE_BG = `url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`;
 
-/* ── Project Data (exact from reference) ── */
+/* ── Project Data ── */
 const projects = [
   {
     id: '01',
     tag: 'Security · AI',
     title: 'DEVSEC',
-    description:
-      'AI-augmented secure development platform. Real-time code intelligence, threat modeling and policy enforcement woven into the IDE.',
-    span: 'col-span-12 md:col-span-7 row-span-2 min-h-[420px] md:min-h-[560px]',
+    description: 'AI-augmented secure development platform. Real-time code intelligence, threat modeling and policy enforcement woven into the IDE.',
+    span: 'col-span-12 lg:col-span-7 row-span-2 min-h-[420px] lg:min-h-[560px]',
     illustration: (
       <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
         <defs>
@@ -44,9 +43,8 @@ const projects = [
     id: '02',
     tag: 'Compression · R&D',
     title: 'ZIP',
-    description:
-      'Next-gen neural compression pipeline. 40% smaller payloads, lossless, hardware-accelerated.',
-    span: 'col-span-12 md:col-span-5 min-h-[320px] md:min-h-[380px]',
+    description: 'Next-gen neural compression pipeline. 40% smaller payloads, lossless, hardware-accelerated.',
+    span: 'col-span-12 lg:col-span-5 min-h-[320px] lg:min-h-[380px]',
     illustration: (
       <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
         <g stroke="white" strokeWidth="1" fill="none" opacity="0.6">
@@ -64,9 +62,8 @@ const projects = [
     id: '03',
     tag: 'Agentic · OS',
     title: 'JARVIS',
-    description:
-      'A personal computing layer that operates your tools. Memory, reasoning, and action — unified.',
-    span: 'col-span-12 min-h-[360px]',
+    description: 'A personal computing layer that operates your tools. Memory, reasoning, and action — unified.',
+    span: 'col-span-12 lg:col-span-6 min-h-[360px]',
     illustration: (
       <svg viewBox="0 0 1000 400" className="absolute inset-0 w-full h-full">
         <g stroke="white" strokeWidth="1" fill="none" opacity="0.6">
@@ -89,9 +86,8 @@ const projects = [
     id: '04',
     tag: 'Retrieval · Education',
     title: 'College RAG Intelligence',
-    description:
-      'A retrieval system purpose-built for academia. Multi-modal indexing across lectures, papers and labs.',
-    span: 'col-span-12 md:col-span-5 min-h-[320px] md:min-h-[380px]',
+    description: 'A retrieval system purpose-built for academia. Multi-modal indexing across lectures, papers and labs.',
+    span: 'col-span-12 lg:col-span-6 min-h-[320px] lg:min-h-[380px]',
     illustration: (
       <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
         <g stroke="white" strokeWidth="1" fill="none" opacity="0.55">
@@ -109,9 +105,8 @@ const projects = [
     id: '05',
     tag: 'Crypto · Acoustic',
     title: 'Secure Audio Data Transfer',
-    description:
-      'Encrypted, air-gapped data transfer via acoustic modulation. Verified at 28 kbps over ultrasonic carriers.',
-    span: 'col-span-12 md:col-span-5 min-h-[320px] md:min-h-[380px]',
+    description: 'Encrypted, air-gapped data transfer via acoustic modulation. Verified at 28 kbps over ultrasonic carriers.',
+    span: 'col-span-12 lg:col-span-5 min-h-[320px] lg:min-h-[380px]',
     illustration: (
       <svg viewBox="0 0 600 400" className="absolute inset-0 w-full h-full">
         <g stroke="white" strokeWidth="1" fill="none" opacity="0.7">
@@ -131,7 +126,7 @@ const projects = [
   },
 ];
 
-/* ── Tilt effect on card hover ── */
+/* ── Premium 3D tilt effect on card hover ── */
 function useTiltEffect(ref) {
   useEffect(() => {
     const el = ref.current;
@@ -141,73 +136,120 @@ function useTiltEffect(ref) {
       const rect = el.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const rx = ((y / rect.height) - 0.5) * -6;
-      const ry = ((x / rect.width) - 0.5) * 8;
-      el.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      const rx = ((y / rect.height) - 0.5) * -8;
+      const ry = ((x / rect.width) - 0.5) * 10;
+      el.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.01, 1.01, 1.01)`;
     };
 
     const handleLeave = () => {
-      el.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+      el.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    };
+
+    const handleEnter = () => {
+      el.style.transition = 'transform 0.1s cubic-bezier(0.16, 1, 0.3, 1)';
     };
 
     el.addEventListener('mousemove', handleMove);
     el.addEventListener('mouseleave', handleLeave);
+    el.addEventListener('mouseenter', handleEnter);
     return () => {
       el.removeEventListener('mousemove', handleMove);
       el.removeEventListener('mouseleave', handleLeave);
+      el.removeEventListener('mouseenter', handleEnter);
     };
   }, [ref]);
 }
 
-/* ── Individual card component ── */
-function ProjectCard({ project }) {
+/* ── Scroll-triggered reveal animation per card ── */
+function useScrollReveal(ref, index, delay = 0) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 60, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          delay: delay + index * 0.08,
+          ease: 'expo.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [ref, index, delay]);
+}
+
+/* ── Individual card component with cinematic animations ── */
+function ProjectCard({ project, index }) {
+  const cardRef = useRef(null);
   const innerRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
   useTiltEffect(innerRef);
+  useScrollReveal(cardRef, index, 0.1);
 
   return (
     <div
+      ref={cardRef}
       className={`group relative ${project.span} border border-white/10 bg-[#0a0a0a] overflow-hidden cursor-pointer project-card`}
     >
-      {/* 3D tilt inner */}
+      {/* 3D tilt inner with illustration */}
       <div
         ref={innerRef}
-        className="absolute inset-0 transition-transform duration-300 ease-out"
+        className="absolute inset-0 transition-transform duration-500 ease-out will-change-transform"
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {project.illustration}
       </div>
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+      {/* Multi-layer gradient overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
+
+      {/* Subtle vignette overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_60%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
 
       {/* Noise texture */}
       <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 opacity-[0.035] pointer-events-none transition-opacity duration-500 group-hover:opacity-[0.06]"
         style={{ backgroundImage: NOISE_BG }}
       />
 
       {/* Card content */}
       <div className="relative z-10 h-full flex flex-col justify-between p-6 md:p-8">
-        <div className="flex items-start justify-between">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-white/50">
+        <div className="flex items-start justify-between gap-4">
+          <div className="text-sm md:text-base tracking-[0.15em] text-white/70 uppercase font-medium">
             {project.tag}
           </div>
-          <div className="text-[10px] tracking-[0.2em] text-white/40">
+          <div className="text-xs tracking-[0.2em] text-white/40 font-medium">
             {project.id}
           </div>
         </div>
 
         <div className="overflow-hidden">
-          <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-            <h3 className="display text-3xl md:text-5xl">{project.title}</h3>
-            <p className="mt-3 text-white/60 text-sm md:text-base max-w-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              {project.description}
-            </p>
-            <div className="mt-4 flex items-center gap-2 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span>Read case</span>
-              <span>→</span>
-            </div>
-          </div>
+          <h3 className="display text-4xl md:text-6xl leading-[0.95] tracking-tight">
+            {project.title}
+          </h3>
+          <p className="mt-4 text-base md:text-lg text-white/50 max-w-xl leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            {project.description}
+          </p>
         </div>
+      </div>
+
+      {/* Corner accent lines - subtle premium detail */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/20" />
+        <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/20" />
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/20" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/20" />
       </div>
     </div>
   );
@@ -215,27 +257,36 @@ function ProjectCard({ project }) {
 
 export default function Projects() {
   const sectionRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  /* Scroll-triggered entrance animations */
+  /* Master scroll-triggered entrance with staggered cascade */
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.project-card',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
-    }, sectionRef);
+    const section = sectionRef.current;
+    if (!section) return;
 
+    const ctx = gsap.context(() => {
+      gsap.set('.project-card', { opacity: 0, y: 80, scale: 0.95 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      tl.to('.project-card', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.4,
+        stagger: 0.06,
+        ease: 'expo.out',
+        clearProps: 'all',
+      });
+    }, section);
+
+    setIsLoaded(true);
     return () => ctx.revert();
   }, []);
 
@@ -243,26 +294,25 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative w-full bg-[#050505] py-32 md:py-40"
+      className="relative w-full bg-[#050505] py-32 md:py-40 overflow-hidden"
     >
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+      {/* Ambient glow backdrop */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(255,255,255,0.02)_0%,transparent_70%)] pointer-events-none" aria-hidden="true" />
+
+      <div className="mx-auto max-w-[1400px] px-6 md:px-10 relative z-10">
         {/* Header */}
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-8">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4">
-              Selected Work — 005
-            </div>
-            <h2 className="display text-5xl md:text-7xl">Projects.</h2>
-          </div>
-          <div className="hidden md:block text-sm text-white/50 max-w-xs text-right">
-            A non-exhaustive sample. Active engagements are not listed.
+            <h2 className="display text-5xl md:text-7xl leading-[0.9] tracking-tight">
+              Products.
+            </h2>
           </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-[minmax(0,1fr)]">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+        {/* Bento Grid - CSS Grid with dense packing for tight, gap-free layout */}
+        <div className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-min grid-flow-dense">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
       </div>

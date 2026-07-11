@@ -4,12 +4,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const LINKS = [
-  { label: 'Studio', id: 'studio' },
-  { label: 'Projects', id: 'projects' },
+  { label: 'What we do', id: 'studio' },
+  { label: 'Products', id: 'projects' },
   { label: 'Services', id: 'services' },
   { label: 'Enterprise', id: 'enterprise' },
   { label: 'About', id: 'about' },
-  { label: 'Community', href: '/community' },
+  { label: 'Explore Community', href: '/community' },
   { label: 'Contact', id: 'contact' },
 ]
 
@@ -40,21 +40,24 @@ export default function Nav() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3' : 'py-6'}`}>
       <div className={`mx-auto max-w-[1400px] px-6 md:px-10 transition-all duration-500`}>
-        <div className={`flex items-center justify-between rounded-none transition-all duration-500 ${scrolled ? 'backdrop-blur-xl bg-black/40 border border-white/5 px-5 py-2.5' : 'px-0 py-0'}`}>
+        <div className={`flex items-center justify-between rounded-full transition-all duration-500 ${scrolled ? 'backdrop-blur-xl bg-black/40 border border-white/10 px-6 py-3 shadow-2xl' : 'px-0 py-0'}`}>
           <Link href="/" className="group flex items-center gap-2">
             <ZMark />
             <span className="text-[15px] tracking-[-0.02em] font-medium">Zplore</span>
           </Link>
           <nav className="hidden md:flex items-center gap-8">
-            {LINKS.map(l => l.href ? (
-              <Link key={l.label} href={l.href} className="text-[13px] text-white/70 hover:text-white transition-colors underline-draw">{l.label}</Link>
-            ) : (
-              <button key={l.label} onClick={() => goTo(l.id)} className="text-[13px] text-white/70 hover:text-white transition-colors underline-draw">{l.label}</button>
+            {LINKS.filter(l => l.id).map(l => (
+              <button key={l.label} onClick={() => goTo(l.id)} className="text-[15px] text-white/80 hover:text-white transition-colors underline-draw font-excon">{l.label}</button>
             ))}
+            <Link
+              href="/community"
+              className="text-[15px] text-white/80 hover:text-white transition-colors border border-white/20 hover:border-white px-5 py-2 rounded-full font-excon"
+            >
+              Explore Community
+            </Link>
           </nav>
-          <button onClick={() => goTo('contact')} className="hidden md:inline-flex group items-center gap-2 border border-white/15 hover:border-white/40 px-4 py-2 text-[12px] tracking-wide transition-colors">
+          <button onClick={() => goTo('contact')} className="hidden md:inline-flex group items-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-2.5 rounded-full text-[14px] font-medium transition-all font-excon">
             <span>Start a project</span>
-            <span className="inline-block translate-x-0 group-hover:translate-x-1 transition-transform">→</span>
           </button>
           <button onClick={() => setOpen(o => !o)} className="md:hidden text-white" aria-label="Menu">
             <div className={`w-6 h-px bg-white transition-transform ${open ? 'rotate-45 translate-y-[3px]' : ''}`} />
@@ -65,11 +68,21 @@ export default function Nav() {
       {open && (
         <div className="md:hidden fixed inset-0 top-[60px] bg-black/95 backdrop-blur-xl z-40">
           <div className="flex flex-col p-8 gap-6">
-            {LINKS.map(l => l.href ? (
-              <Link key={l.label} href={l.href} onClick={() => setOpen(false)} className="text-3xl serif">{l.label}</Link>
-            ) : (
-              <button key={l.label} onClick={() => goTo(l.id)} className="text-3xl serif text-left">{l.label}</button>
+            {LINKS.filter(l => l.id).map(l => (
+              <button key={l.label} onClick={() => goTo(l.id)} className="text-3xl font-excon text-left text-white/80 hover:text-white">{l.label}</button>
             ))}
+            <Link
+              href="/community"
+              onClick={() => setOpen(false)}
+              className="text-3xl font-excon text-left border border-white/20 px-5 py-3 rounded-2xl text-white/80 hover:text-white"
+            >
+              Explore Community
+            </Link>
+            <div className="mt-4">
+              <button onClick={() => goTo('contact')} className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 px-7 py-3 rounded-full text-base font-medium transition-all font-excon">
+                <span>Start a project</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

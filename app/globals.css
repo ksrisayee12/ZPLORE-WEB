@@ -1,4 +1,154 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Black+Ops+One&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=HK+Grotesk:wght@400;500;600;700;800;900&family=Satoshi:wght@300;400;500;600;700;800;900&family=Epilogue:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'Nohemi';
+  src: url('/fonts/Nohemi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Qanelas Soft';
+  src: url('/fonts/QanelasSoft-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/fonts/Supreme-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/fonts/Supreme-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url('/fonts/ClashDisplay-Semibold.woff2') format('woff2'),
+       url('/fonts/ClashDisplay-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url('/fonts/ClashDisplay-Medium.woff2') format('woff2'),
+       url('/fonts/ClashDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gambarino';
+  src: url('/fonts/Gambarino-Regular.woff2') format('woff2'),
+       url('/fonts/Gambarino-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Excon';
+  src: url('/fonts/Excon-Regular.woff2') format('woff2'),
+       url('/fonts/Excon-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('/fonts/Boska-Bold.woff2') format('woff2'),
+       url('/fonts/Boska-Bold.woff') format('woff');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('/fonts/Boska-Regular.woff2') format('woff2'),
+       url('/fonts/Boska-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BoskaLight';
+  src: url('/fonts/Boska-LightItalic.woff2') format('woff2'),
+       url('/fonts/Boska-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'BoskaItalic';
+  src: url('/fonts/Boska-Italic.woff2') format('woff2'),
+       url('/fonts/Boska-Italic.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'BoskaMediumItalic';
+  src: url('/fonts/Boska-MediumItalic.woff2') format('woff2'),
+       url('/fonts/Boska-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('/fonts/GeneralSans-Regular.woff2') format('woff2'),
+       url('/fonts/GeneralSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('/fonts/GeneralSans-Medium.woff2') format('woff2'),
+       url('/fonts/GeneralSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('/fonts/GeneralSans-MediumItalic.woff2') format('woff2'),
+       url('/fonts/GeneralSans-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Montreal';
+  src: local('Montreal'), local('Neue Montreal'), local('PP Neue Montreal'), url('/fonts/Montreal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fluid box reposition';
+  src: local('Fluid box reposition'), local('FluidBoxReposition'), url('/fonts/FluidBoxReposition.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -24,7 +174,47 @@ body {
   letter-spacing: -0.01em;
 }
 
-.serif { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; }
+.serif { font-family: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif; font-weight: 400; letter-spacing: -0.02em; }
+
+/* Premium classic typography */
+.premium-serif { font-family: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; line-height: 1.2; }
+.premium-serif-bold { font-weight: 600; }
+.premium-serif-light { font-weight: 300; }
+.premium-serif-medium { font-weight: 500; }
+.premium-serif-semibold { font-weight: 600; }
+
+/* New font classes */
+.font-inter { font-family: 'Inter', -apple-system, sans-serif; }
+.font-supreme { font-family: 'Supreme', 'Inter', sans-serif !important; font-weight: 700; letter-spacing: -0.01em; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-black-ops { font-family: 'Black Ops One', cursive, sans-serif; font-weight: 400; letter-spacing: 0.04em; }
+.font-bricolage { font-family: 'Bricolage Grotesque', 'Inter', sans-serif; }
+.font-nohemi { font-family: 'Nohemi', 'Qanelas Soft', 'Inter', sans-serif; font-weight: 500; letter-spacing: 0.02em; }
+.font-clash-display { font-family: 'ClashDisplay', 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+.font-clash-display-medium { font-family: 'ClashDisplay', 'Inter', sans-serif; font-weight: 500; letter-spacing: -0.02em; }
+.font-gambarino { font-family: 'Gambarino', 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-gambarino-italic { font-family: 'Gambarino', 'Instrument Serif', Georgia, serif; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
+.font-excon { font-family: 'Excon', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-general-sans-medium { font-family: 'GeneralSans', 'Inter', sans-serif; font-weight: 500; letter-spacing: -0.02em; }
+.font-general-sans { font-family: 'GeneralSans', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-boska-bold { font-family: 'Boska', 'Georgia', serif; font-weight: 700; letter-spacing: -0.02em; }
+.font-boska { font-family: 'Boska', 'Georgia', serif; font-weight: 400; letter-spacing: -0.02em; }
+.font-boska-light-italic { font-family: 'BoskaLight', 'Georgia', serif; font-weight: 300; font-style: italic; letter-spacing: -0.01em; }
+.font-boska-italic { font-family: 'BoskaItalic', 'Georgia', serif; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
+.font-boska-medium-italic { font-family: 'BoskaMediumItalic', 'Georgia', serif; font-weight: 500; font-style: italic; letter-spacing: -0.01em; }
+.font-qanelas-soft { font-family: 'Qanelas Soft', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-montreal { font-family: 'Montreal', 'Neue Montreal', 'PP Neue Montreal', 'Inter', -apple-system, sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-fluid-box-reposition { font-family: 'Fluid box reposition', 'Nohemi', 'Inter', sans-serif; }
+.font-epilogue { font-family: 'Epilogue', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-epilogue-medium { font-weight: 500; }
+.font-epilogue-semibold { font-weight: 600; }
+.font-jetbrains-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-weight: 600; font-style: italic; letter-spacing: 0; }
+.font-hk-grotesk { font-family: 'HK Grotesk', 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+.font-hk-grotesk-wide { font-family: 'HK Grotesk', 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.02em; }
+.font-satoshi { font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-satoshi-medium { font-weight: 500; }
+.font-satoshi-semibold { font-weight: 600; }
+.font-satoshi-variable { font-family: 'Satoshi Variable', 'Satoshi', 'Inter', sans-serif; font-weight: 400; font-variation-settings: 'wdth' 100, 'wght' 400; letter-spacing: -0.01em; }
 
 /* Lenis smooth scroll */
 html.lenis, html.lenis body { height: auto; }
@@ -94,7 +284,7 @@ html.lenis, html.lenis body { height: auto; }
   letter-spacing: -0.04em;
   line-height: 0.92;
 }
-
+.font-supreme { font-family: 'Supreme', 'Inter', sans-serif !important; font-weight: 700; letter-spacing: -0.01em; }
 .hairline { border-color: rgba(255,255,255,0.08); }
 
 .mask-fade-b { -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent); mask-image: linear-gradient(to bottom, black 60%, transparent); }

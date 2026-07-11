@@ -6,6 +6,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'clash-display': ['ClashDisplay', 'Inter', 'sans-serif'],
+        'clash-display-medium': ['ClashDisplay', 'Inter', 'sans-serif'],
+        'nohemi': ['Nohemi', 'Qanelas Soft', 'Inter', 'sans-serif'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

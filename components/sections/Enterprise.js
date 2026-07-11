@@ -81,10 +81,10 @@ export default function Enterprise() {
       <div className="mx-auto max-w-[1400px] px-6 md:px-10">
         <div className="grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4">Enterprise — 007</div>
-            <h2 className="display text-5xl md:text-7xl mb-8">Built for scale, designed for trust.</h2>
-            <p className="text-white/60 leading-relaxed max-w-md">A reference architecture for production AI systems. Identity at the edge. Models behind policy. Every event signed, sealed, replayable.</p>
-            <ul className="mt-8 space-y-3 text-sm text-white/70">
+            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4">Enterprise</div>
+            <h2 className="font-clash-display-medium text-5xl md:text-7xl mb-8">Built for scale, designed for trust.</h2>
+            <p className="font-general-sans text-white/60 leading-relaxed max-w-md">A reference architecture for production AI systems. Identity at the edge. Models behind policy. Every event signed, sealed, replayable.</p>
+            <ul className="mt-8 space-y-3 text-sm text-white/70 font-general-sans">
               {['SOC2-ready by default', 'BYOK / customer-managed encryption', 'Self-hosted, hybrid or fully managed', 'Sub-100ms agent orchestration'].map(s => (
                 <li key={s} className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-white rounded-full" />{s}</li>
               ))}

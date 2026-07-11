@@ -2,11 +2,11 @@
 import { useEffect, useRef } from 'react'
 
 const STEPS = [
-  { n: '01', title: 'Discovery', body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.' },
-  { n: '02', title: 'Architecture', body: 'System design, model selection, infra plan, threat model. Documented, decisioned, dated.' },
-  { n: '03', title: 'Build', body: 'Senior engineers shipping in your repo, your cadence, your standards. Weekly demos, never decks.' },
-  { n: '04', title: 'Ship', body: 'Hardening, instrumentation, rollout. We sit with on-call rotations through the first incident.' },
-  { n: '05', title: 'Compound', body: 'Quarterly evolution. New capabilities, model refreshes, scale gates. The system gets sharper with age.' },
+  { n: '01', title: 'Discovery Sprint', body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.' },
+  { n: '02', title: 'System Architecture', body: 'System design, model selection, infra plan, threat model. Documented, decisioned, dated.' },
+  { n: '03', title: 'Embedded Build', body: 'Senior engineers shipping in your repo, your cadence, your standards. Weekly demos, never decks.' },
+  { n: '04', title: 'Production Ship', body: 'Hardening, instrumentation, rollout. We sit with on-call rotations through the first incident.' },
+  { n: '05', title: 'Compound Evolution', body: 'Quarterly evolution. New capabilities, model refreshes, scale gates. The system gets sharper with age.' },
 ]
 
 export default function Services() {
@@ -79,10 +79,9 @@ export default function Services() {
       <div className="absolute top-10 left-0 right-0 z-20">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10 flex items-end justify-between">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">How we work — 006</div>
-            <h2 className="display text-5xl md:text-7xl">Services.</h2>
+            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">How we work</div>
+            <h2 className="font-clash-display-medium text-5xl md:text-7xl">Services.</h2>
           </div>
-          <div className="hidden md:block text-sm text-white/50 max-w-xs text-right">Scroll →</div>
         </div>
       </div>
 
@@ -100,10 +99,24 @@ export default function Services() {
                   <div className="display text-6xl text-white/20">{s.n}</div>
                 </div>
                 <h3 className="display text-4xl md:text-5xl mt-8">{s.title}</h3>
-                <p className="mt-4 text-white/60 text-base leading-relaxed max-w-md">{s.body}</p>
-                <div className="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/40">
-                  <span className="w-8 h-px bg-white/40" /> phase {s.n}
-                </div>
+                {s.subtitle && (
+                  <div className="mt-3 text-white/90 text-lg font-medium font-general-sans">{s.subtitle}</div>
+                )}
+                <p className="mt-4 font-general-sans text-white/60 text-base leading-relaxed max-w-md">{s.body}</p>
+                {s.buttonText ? (
+                  <div className="mt-8">
+                    <a
+                      href={s.buttonHref}
+                      className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors"
+                    >
+                      {s.buttonText} →
+                    </a>
+                  </div>
+                ) : (
+                  <div className="mt-10 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/40">
+                    <span className="w-8 h-px bg-white/40" /> phase {s.n}
+                  </div>
+                )}
               </div>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3 h-3 bg-white rounded-full" />
             </div>

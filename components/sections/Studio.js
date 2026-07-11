@@ -1,10 +1,44 @@
 'use client'
+
 import { useEffect, useRef } from 'react'
 
+const BL = ({ children }) => (
+  <span className="serif italic font-normal">{children}</span>
+)
+
 const STATEMENTS = [
-  { kicker: '01 — Practice', title: 'A studio built around frontier engineering.', body: 'We work in small, senior teams across AI, security, and systems design. No middle layers, no slide-decks. Just the people who ship.' },
-  { kicker: '02 — Method', title: 'Research, then artifact.', body: 'Every engagement begins with a working prototype within two weeks. Reality is the only design review that matters.' },
-  { kicker: '03 — Belief', title: 'Software should feel inevitable.', body: 'We obsess over the seams. Latency, motion, error states, the moment a model recovers. The boring parts are the brand.' },
+  {
+    num: '01',
+    title: 'DISCOVERY',
+    subtitle: <>The <BL>right question,</BL> before the right solution</>,
+    body: 'Before anything gets designed, it gets questioned — by us, out loud, until nothing about it is assumed.',
+  },
+  {
+    num: '02',
+    title: 'ARCHITECTURE',
+    subtitle: <>We build the parts <BL>that outlive the pitch.</BL></>,
+    body: 'Demos are easy. What holds under real users, real load, real time — that takes discipline most skip. We design for what the product becomes, not what it looks like on day one.',
+  },
+  {
+    num: '03',
+    title: 'INTELLIGENCE',
+    subtitle: <><BL>Innovation, engineered</BL> to hold.</>,
+    body: 'Built to think, built to last. Intelligence that works long after the launch post is forgotten.',
+  },
+  {
+    num: '04',
+    title: 'ECOSYSTEM',
+    subtitle: <><BL>Students. Researchers. Founders.</BL> One table.</>,
+    body: "We're building the room where the next idea happens. The best ideas rarely come from a boardroom.",
+  },
+  {
+    num: '05',
+    title: 'START',
+    subtitle: <>Bring us the problem. We'll <BL>build.</BL></>,
+    body: "We'll bring the prototype. Two weeks, working software, no slideware in between.",
+    buttonText: 'Start a project',
+    buttonHref: '#contact',
+  },
 ]
 
 export default function Studio() {
@@ -53,14 +87,29 @@ export default function Studio() {
       <div className="absolute inset-0 flex items-center">
         <div className="mx-auto max-w-[1400px] w-full px-6 md:px-10 grid md:grid-cols-12 gap-12 items-center">
           {/* Left: text steps */}
-          <div className="md:col-span-6 relative h-[60vh] md:h-[70vh]">
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 absolute -top-2 left-0">The Studio</div>
-            <div className="relative h-full">
+          <div className="md:col-span-6 relative h-[65vh] md:h-[75vh] flex flex-col justify-center">
+            <div className="mb-6">
+              <h2 className="font-clash-display-medium text-6xl md:text-8xl font-medium tracking-tight text-white">What we do</h2>
+            </div>
+            <div className="relative flex-1">
               {STATEMENTS.map((s, i) => (
-                <div key={i} ref={el => (stepsRef.current[i] = el)} className="absolute inset-0 flex flex-col justify-center">
-                  <div className="text-xs tracking-[0.2em] uppercase text-white/40 mb-6">{s.kicker}</div>
-                  <h2 className="display text-5xl md:text-7xl text-balance">{s.title}</h2>
-                  <p className="mt-6 text-white/60 text-lg max-w-lg leading-relaxed">{s.body}</p>
+                <div key={i} ref={el => (stepsRef.current[i] = el)} className="absolute inset-0 flex flex-col justify-start pt-2">
+                  <h3 className="font-supreme text-4xl md:text-6xl font-bold uppercase tracking-wide text-white flex items-center gap-3 md:gap-4">
+                    <span>{s.num}</span>
+                    <span className="text-white/40 font-normal">-</span>
+                    <span>{s.title}</span>
+                  </h3>
+                  {s.subtitle && (
+                    <div className="mt-8 md:mt-10 font-boska text-2xl md:text-4xl text-white leading-tight">{s.subtitle}</div>
+                  )}
+                  <p className="mt-6 md:mt-8 font-general-sans text-white/60 text-base md:text-lg max-w-lg leading-relaxed">{s.body}</p>
+                  {s.buttonText && (
+                    <div className="mt-8">
+                      <a href={s.buttonHref || '#contact'} className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-3 rounded-full text-sm font-medium transition-all font-excon">
+                        <span>{s.buttonText}</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
