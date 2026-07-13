@@ -246,6 +246,50 @@ body {
 .font-satoshi-medium { font-weight: 500; }
 .font-satoshi-semibold { font-weight: 600; }
 .font-satoshi-variable { font-family: 'Satoshi Variable', 'Satoshi', 'Inter', sans-serif; font-weight: 400; font-variation-settings: 'wdth' 100, 'wght' 400; letter-spacing: -0.01em; }
+/* Project card premium animations */
+.project-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.project-card > div:first-child {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Smooth layer transitions */
+.project-card:hover > div:first-child {
+  filter: brightness(1.15) contrast(1.1);
+}
+
+/* Staggered layer reveal */
+.layer-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: layerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes layerReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium focus states */
+.project-card:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -1px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 /* Lenis smooth scroll */
 html.lenis, html.lenis body { height: auto; }
@@ -315,7 +359,7 @@ html.lenis, html.lenis body { height: auto; }
   letter-spacing: -0.04em;
   line-height: 0.92;
 }
-.font-supreme { font-family: 'Supreme', 'Inter', sans-serif !important; font-weight: 700; letter-spacing: -0.01em; }
+/* .font-supreme { font-family: 'Supreme', 'Inter', sans-serif !important; font-weight: 700; letter-spacing: -0.01em; } */
 .hairline { border-color: rgba(255,255,255,0.08); }
 
 .mask-fade-b { -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent); mask-image: linear-gradient(to bottom, black 60%, transparent); }

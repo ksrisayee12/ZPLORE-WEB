@@ -193,6 +193,7 @@ function useScrollReveal(ref, index, delay = 0) {
 function ProjectCard({ project, index }) {
   const cardRef = useRef(null);
   const innerRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
   useTiltEffect(innerRef);
   useScrollReveal(cardRef, index, 0.1);
 
