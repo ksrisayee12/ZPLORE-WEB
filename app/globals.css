@@ -150,6 +150,33 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Zodiak';
+  src: url('/fonts/Zodiak-Regular.woff2') format('woff2'),
+       url('/fonts/Zodiak-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Zodiak';
+  src: url('/fonts/Zodiak-Light.woff2') format('woff2'),
+       url('/fonts/Zodiak-Light.woff') format('woff');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quilon Medium';
+  src: url('/fonts/Quilon-Medium.woff2') format('woff2'),
+       url('/fonts/Quilon-Medium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -202,6 +229,10 @@ body {
 .font-boska-light-italic { font-family: 'BoskaLight', 'Georgia', serif; font-weight: 300; font-style: italic; letter-spacing: -0.01em; }
 .font-boska-italic { font-family: 'BoskaItalic', 'Georgia', serif; font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
 .font-boska-medium-italic { font-family: 'BoskaMediumItalic', 'Georgia', serif; font-weight: 500; font-style: italic; letter-spacing: -0.01em; }
+.font-zodiac { font-family: 'Zodiak', 'Boska', 'Georgia', serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-zodiac-light { font-family: 'Zodiak', 'Boska', 'Georgia', serif; font-weight: 300; letter-spacing: -0.01em; }
+.font-quilon { font-family: 'Quilon Medium', 'Georgia', serif; font-weight: 500; letter-spacing: -0.01em; }
+.font-quilon-medium { font-family: 'Quilon Medium', 'Georgia', serif; font-weight: 500; letter-spacing: -0.01em; }
 .font-qanelas-soft { font-family: 'Qanelas Soft', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
 .font-montreal { font-family: 'Montreal', 'Neue Montreal', 'PP Neue Montreal', 'Inter', -apple-system, sans-serif; font-weight: 400; letter-spacing: -0.01em; }
 .font-fluid-box-reposition { font-family: 'Fluid box reposition', 'Nohemi', 'Inter', sans-serif; }

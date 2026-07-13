@@ -31,7 +31,9 @@ export default function Services() {
             end: () => '+=' + distance(),
             scrub: 0.8,
             pin: true,
+            pinSpacing: true,
             invalidateOnRefresh: true,
+            refreshPriority: 15,
           },
         })
         // animate path

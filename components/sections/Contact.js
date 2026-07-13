@@ -60,7 +60,8 @@ export default function Contact() {
       </div>
       <div className="relative mx-auto max-w-[1100px] px-6 md:px-10">
         <h2 className="font-clash-display-medium text-6xl md:text-8xl leading-[0.9] text-balance">Tell us what<br /><span className="serif italic text-white/80">you're building.</span></h2>
-        <p className="font-general-sans text-white/55 mt-6 max-w-md">We reply within one business day.</p>
+        <div className="font-clash-display text-2xl md:text-3xl text-white/90 mt-6 leading-snug">Build What Doesn't Exist Yet. The Next System Starts With You.</div>
+        <p className="font-general-sans text-white/55 mt-4 max-w-md">We reply within one business day.</p>
 
         {submitted ? (
           <div className="mt-16 border border-white/10 p-10">

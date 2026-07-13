@@ -36,9 +36,12 @@ export default function Contact() {
             <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-6">
               Contact
             </div>
-            <h2 className="display text-5xl md:text-7xl mb-8 leading-[0.95]">
+            <h2 className="display text-5xl md:text-7xl mb-6 leading-[0.95]">
               Start a project.
             </h2>
+            <div className="font-clash-display text-2xl md:text-3xl text-white/90 mb-6 leading-snug">
+              Build What Doesn't Exist Yet. The Next System Starts With You.
+            </div>
             <p className="text-white/60 text-xl leading-relaxed max-w-md text-base md:text-xl">
               Tell us about your problem. We will respond within 48 hours with a
               brief diagnostic and a proposed engagement model.

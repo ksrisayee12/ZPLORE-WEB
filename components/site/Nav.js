@@ -9,6 +9,7 @@ const LINKS = [
   { label: 'Services', id: 'services' },
   { label: 'Enterprise', id: 'enterprise' },
   { label: 'About', id: 'about' },
+  { label: 'FAQ', id: 'faq' },
   { label: 'Explore Community', href: '/community' },
   { label: 'Contact', id: 'contact' },
 ]

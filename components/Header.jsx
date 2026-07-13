@@ -34,6 +34,7 @@ export default function Header() {
     { label: 'Services', id: 'services' },
     { label: 'Enterprise', id: 'enterprise' },
     { label: 'About', id: 'about' },
+    { label: 'FAQ', id: 'faq' },
     { label: 'Explore Community', id: 'community' },
   ];
 
@@ -74,7 +75,7 @@ export default function Header() {
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
-              {navLinks.slice(0, 5).map((link) => (
+              {navLinks.slice(0, 6).map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
@@ -124,7 +125,7 @@ export default function Header() {
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <div className="flex flex-col h-full px-6 pt-24 pb-12">
           <nav className="flex flex-col gap-6">
-            {navLinks.slice(0, 5).map((link) => (
+            {navLinks.slice(0, 6).map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}

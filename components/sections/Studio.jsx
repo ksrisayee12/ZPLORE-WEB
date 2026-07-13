@@ -58,6 +58,8 @@ export default function Studio() {
             end: '+=' + (total * 100) + '%',
             scrub: 0.6,
             pin: true,
+            pinSpacing: true,
+            refreshPriority: 20,
           },
         })
 

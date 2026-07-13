@@ -8,7 +8,6 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           <div className="col-span-2">
             <div className="font-clash-display text-6xl md:text-8xl tracking-tight">Zplore</div>
-            <p className="text-white/50 text-sm mt-4 max-w-xs">A deep-tech studio engineering the next decade of intelligent systems.</p>
           </div>
           <FooterCol title="Studio" items={[['Products', '#projects'], ['Services', '#services'], ['Enterprise', '#enterprise']]} />
           <FooterCol title="Company" items={[['About', '#about'], ['Community', '/community'], ['Contact', '#contact']]} />

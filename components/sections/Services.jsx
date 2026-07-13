@@ -56,6 +56,8 @@ export default function Services() {
           start: 'top top',
           end: `+=${totalWidth * 0.85}`,
           pin: true,
+          pinSpacing: true,
+          refreshPriority: 15,
           scrub: 1.2,
           anticipatePin: 1,
           onUpdate: (self) => {

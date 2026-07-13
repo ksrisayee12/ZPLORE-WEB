@@ -37,10 +37,6 @@ export default function Footer() {
                 Zplore
               </span>
             </div>
-            <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              A deep-tech engineering studio. We build frontier AI, security, and
-              intelligence systems for the companies defining what comes next.
-            </p>
           </div>
 
           {/* Nav columns */}
