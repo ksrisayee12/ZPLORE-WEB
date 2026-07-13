@@ -193,7 +193,6 @@ function useScrollReveal(ref, index, delay = 0) {
 function ProjectCard({ project, index }) {
   const cardRef = useRef(null);
   const innerRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
   useTiltEffect(innerRef);
   useScrollReveal(cardRef, index, 0.1);
 
@@ -226,7 +225,7 @@ function ProjectCard({ project, index }) {
       {/* Card content */}
       <div className="relative z-10 h-full flex flex-col justify-between p-6 md:p-8">
         <div className="flex items-start justify-between gap-4">
-          <div className="text-sm md:text-base tracking-[0.15em] text-white/70 uppercase font-medium">
+          <div className="font-boska text-lg md:text-xl text-white/80">
             {project.tag}
           </div>
           <div className="text-xs tracking-[0.2em] text-white/40 font-medium">
@@ -235,10 +234,10 @@ function ProjectCard({ project, index }) {
         </div>
 
         <div className="overflow-hidden">
-          <h3 className="display text-4xl md:text-6xl leading-[0.95] tracking-tight">
+          <h3 className="font-supreme font-bold uppercase tracking-wide text-4xl md:text-6xl leading-[0.95] text-white">
             {project.title}
           </h3>
-          <p className="mt-4 text-base md:text-lg text-white/50 max-w-xl leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <p className="mt-4 font-general-sans text-base md:text-lg text-white/50 max-w-xl leading-relaxed tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             {project.description}
           </p>
         </div>
@@ -303,13 +302,13 @@ export default function Projects() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-8">
           <div>
-            <h2 className="display text-5xl md:text-7xl leading-[0.9] tracking-tight">
+            <h2 className="font-clash-display-medium text-5xl md:text-7xl leading-[0.9] tracking-tight">
               Products.
             </h2>
           </div>
         </div>
 
-        {/* Bento Grid - CSS Grid with dense packing for tight, gap-free layout */}
+        {/* Bento Grid - CSS Grid with dense packing */}
         <div className="grid grid-cols-12 gap-4 md:gap-6 auto-rows-min grid-flow-dense">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />

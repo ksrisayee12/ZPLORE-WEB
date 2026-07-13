@@ -2,35 +2,39 @@
 
 import { useEffect, useRef } from 'react'
 
+const BL = ({ children }) => (
+  <span className="serif italic font-normal">{children}</span>
+)
+
 const STATEMENTS = [
   {
     num: '01',
     title: 'DISCOVERY',
-    subtitle: 'The right question, before the right solution',
-    body: 'Before anything gets designed, it gets questioned - by us, out loud, until nothing about it is assumed.',
+    subtitle: <>The <BL>right question,</BL> before the right solution</>,
+    body: 'Before anything gets designed, it gets questioned — by us, out loud, until nothing about it is assumed.',
   },
   {
     num: '02',
     title: 'ARCHITECTURE',
-    subtitle: 'We build the parts that outlive the pitch.',
-    body: 'Demos are easy. What holds under real users, real load, real time - that takes discipline most skip. We design for what the product becomes, not what it looks like on day one.',
+    subtitle: <>We build the parts <BL>that outlive the pitch.</BL></>,
+    body: 'Demos are easy. What holds under real users, real load, real time — that takes discipline most skip. We design for what the product becomes, not what it looks like on day one.',
   },
   {
     num: '03',
     title: 'INTELLIGENCE',
-    subtitle: 'Innovation, engineered to hold.',
+    subtitle: <><BL>Innovation, engineered</BL> to hold.</>,
     body: 'Built to think, built to last. Intelligence that works long after the launch post is forgotten.',
   },
   {
     num: '04',
     title: 'ECOSYSTEM',
-    subtitle: 'Students. Researchers. Founders. One table.',
+    subtitle: <><BL>Students. Researchers. Founders.</BL> One table.</>,
     body: "We're building the room where the next idea happens. The best ideas rarely come from a boardroom.",
   },
   {
     num: '05',
     title: 'START',
-    subtitle: 'Bring us the problem.',
+    subtitle: <>Bring us the problem. We'll <BL>build.</BL></>,
     body: "We'll bring the prototype. Two weeks, working software, no slideware in between.",
     buttonText: 'Start a project',
     buttonHref: '#contact',
@@ -87,7 +91,7 @@ export default function Studio() {
           {/* Left: text steps */}
           <div className="md:col-span-6 relative h-[65vh] md:h-[75vh] flex flex-col justify-center">
             <div className="mb-6">
-              <h2 className="display text-6xl md:text-8xl font-bold tracking-tight text-white">What we do</h2>
+              <h2 className="font-clash-display-medium text-6xl md:text-8xl font-medium tracking-tight text-white">What we do</h2>
             </div>
             <div className="relative flex-1">
               {STATEMENTS.map((s, i) => (
@@ -98,12 +102,12 @@ export default function Studio() {
                     <span>{s.title}</span>
                   </h3>
                   {s.subtitle && (
-                    <div className="mt-8 md:mt-10 text-2xl md:text-4xl text-white font-inter font-semibold leading-tight">{s.subtitle}</div>
+                    <div className="mt-8 md:mt-10 font-boska text-2xl md:text-4xl text-white leading-tight">{s.subtitle}</div>
                   )}
-                  <p className="mt-6 md:mt-8 font-inter text-white/60 text-base md:text-lg max-w-lg leading-relaxed">{s.body}</p>
+                  <p className="mt-6 md:mt-8 font-general-sans text-white/60 text-base md:text-lg max-w-lg leading-relaxed">{s.body}</p>
                   {s.buttonText && (
                     <div className="mt-8">
-                      <a href={s.buttonHref || '#contact'} className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-3 rounded-full text-sm font-medium transition-all font-playfair">
+                      <a href={s.buttonHref || '#contact'} className="inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-3 rounded-full text-sm font-medium transition-all font-excon">
                         <span>{s.buttonText}</span>
                       </a>
                     </div>

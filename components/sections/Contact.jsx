@@ -1,140 +1,118 @@
-'use client';
-
-import { useRef, useState } from 'react';
-
-/**
- * Contact Section — reconstructed from reference DOM patterns.
- * Minimalist form: name, email, project description.
- * Matches the brand: borderless inputs with bottom-border only,
- * white on dark, no card/box styling.
- */
+'use client'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Contact() {
-  const formRef = useRef(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const ref = useRef(null)
+  const lightRef = useRef(null)
+  const btnRef = useRef(null)
+  const [focusName, setFocusName] = useState(null)
+  const [submitted, setSubmitted] = useState(false)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    // Simulated submit (no backend in reconstruction)
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 1200);
-  };
+  useEffect(() => {
+    const move = (e) => {
+      if (!lightRef.current) return
+      const x = (e.clientX / window.innerWidth) * 100
+      const y = (e.clientY / window.innerHeight) * 100
+      lightRef.current.style.background = `radial-gradient(600px circle at ${x}% ${y}%, rgba(255,255,255,0.08), transparent 60%)`
+    }
+    window.addEventListener('mousemove', move)
+    return () => window.removeEventListener('mousemove', move)
+  }, [])
+
+  // magnetic submit
+  useEffect(() => {
+    const el = btnRef.current
+    if (!el) return
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect()
+      const dx = e.clientX - (r.left + r.width / 2)
+      const dy = e.clientY - (r.top + r.height / 2)
+      const dist = Math.hypot(dx, dy)
+      if (dist < 180) {
+        const k = (180 - dist) / 180
+        el.style.transform = `translate(${dx * 0.25 * k}px, ${dy * 0.25 * k}px)`
+      } else {
+        el.style.transform = 'translate(0,0)'
+      }
+    }
+    const onLeave = () => { el.style.transform = 'translate(0,0)' }
+    window.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => { window.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave) }
+  }, [])
+
+  const submit = async (e) => {
+    e.preventDefault()
+    const data = new FormData(e.currentTarget)
+    const body = Object.fromEntries(data.entries())
+    try {
+      await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    } catch (err) { }
+    setSubmitted(true)
+  }
 
   return (
-    <section
-      id="contact"
-      className="relative w-full bg-[#050505] py-32 md:py-44 overflow-hidden"
-    >
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-          {/* Left — heading */}
-          <div className="md:col-span-5">
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-6">
-              Contact
-            </div>
-            <h2 className="display text-5xl md:text-7xl mb-6 leading-[0.95]">
-              Start a project.
-            </h2>
-            <div className="font-clash-display text-2xl md:text-3xl text-white/90 mb-6 leading-snug">
-              Build What Doesn't Exist Yet. The Next System Starts With You.
-            </div>
-            <p className="text-white/60 text-xl leading-relaxed max-w-md text-base md:text-xl">
-              Tell us about your problem. We will respond within 48 hours with a
-              brief diagnostic and a proposed engagement model.
-            </p>
+    <section id="contact" ref={ref} className="relative w-full bg-[#050505] py-32 md:py-44 overflow-hidden">
+      <div ref={lightRef} className="absolute inset-0 pointer-events-none transition-[background] duration-300" />
+      {/* depth field */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.05), transparent 50%)' }} />
+      </div>
+      <div className="relative mx-auto max-w-[1100px] px-6 md:px-10">
+        <h2 className="font-clash-display-medium text-6xl md:text-8xl leading-[0.9] text-balance">Tell us what<br /><span className="serif italic text-white/80">you're building.</span></h2>
+        <div className="font-clash-display text-2xl md:text-3xl text-white/90 mt-6 leading-snug">Build What Doesn't Exist Yet. The Next System Starts With You.</div>
+        <p className="font-general-sans text-white/55 mt-4 max-w-md">We reply within one business day.</p>
 
-            <div className="mt-12 space-y-4 text-white/40 text-lg">
-              <div className="flex items-center gap-3">
-                <span className="w-1.5 h-1.5 bg-white/40 rounded-full" />
-                studio@zplore.dev
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-1.5 h-1.5 bg-white/40 rounded-full" />
-                Bengaluru · Remote-first
-              </div>
-            </div>
+        {submitted ? (
+          <div className="mt-16 border border-white/10 p-10">
+            <div className="display text-3xl md:text-4xl">Transmission received.</div>
+            <p className="font-general-sans text-white/60 mt-3">A senior engineer will be in touch within 24 hours.</p>
           </div>
-
-          {/* Right — form */}
-          <div className="md:col-span-6 md:col-start-7">
-            {submitted ? (
-              <div className="flex flex-col items-start justify-center h-full py-16">
-                <div className="font-nohemi text-5xl text-white/90 mb-4">
-                  Received.
-                </div>
-                <p className="text-white/50 text-base font-satoshi text-lg">
-                  We will be in touch within 48 hours.
-                </p>
-              </div>
-            ) : (
-              <form
-                ref={formRef}
-                onSubmit={handleSubmit}
-                className="space-y-10"
-              >
-                <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/40 block mb-3 font-hk-grotesk text-sm font-epilogue">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your full name"
-                    className="w-full bg-transparent border-none border-b border-white/20 focus:border-white focus:outline-none py-3 text-white text-base placeholder:text-white/30 font-epilogue"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/40 block mb-3 font-hk-grotesk text-sm font-epilogue">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    className="w-full bg-transparent border-none border-b border-white/20 focus:border-white focus:outline-none py-3 text-white text-base placeholder:text-white/30 font-epilogue"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/40 block mb-3 font-hk-grotesk text-sm font-epilogue">
-                    Company
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Your company or organisation"
-                    className="w-full bg-transparent border-none border-b border-white/20 focus:border-white focus:outline-none py-3 text-white text-base placeholder:text-white/30 font-epilogue"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/40 block mb-3">
-                    Project brief
-                  </label>
-                  <textarea
-                    required
-                    placeholder="Describe the problem you are trying to solve..."
-                    rows={4}
-                    className="w-full bg-transparent border-none border-b border-white/20 focus:border-white focus:outline-none py-3 text-white text-base placeholder:text-white/30 resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="group inline-flex items-center gap-3 border border-white/20 hover:border-white/50 px-6 py-3.5 text-sm text-white transition-all disabled:opacity-50"
-                >
-                  <span>{loading ? 'Sending…' : 'Send brief'}</span>
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
+        ) : (
+          <form onSubmit={submit} className="mt-16 grid md:grid-cols-2 gap-x-12 gap-y-10">
+            <Field label="Name" name="name" focusName={focusName} setFocusName={setFocusName} required />
+            <Field label="Email" name="email" type="email" focusName={focusName} setFocusName={setFocusName} required />
+            <div className="md:col-span-2">
+              <Field label="Company" name="company" focusName={focusName} setFocusName={setFocusName} />
+            </div>
+            <div className="md:col-span-2">
+              <Field label="Tell us about the project" name="message" textarea focusName={focusName} setFocusName={setFocusName} required />
+            </div>
+            <div className="md:col-span-2 flex items-center justify-end mt-4">
+              <button ref={btnRef} type="submit" className="magnetic group relative inline-flex items-center gap-3 border border-white/30 hover:border-white px-8 py-4 text-sm tracking-wider uppercase transition-colors">
+                <span>Send transmission</span>
+                <span className="transition-transform group-hover:translate-x-1">→</span>
+                <span className="pointer-events-none absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors" />
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </section>
-  );
+  )
+}
+
+function Field({ label, name, type = 'text', focusName, setFocusName, required, textarea, placeholder }) {
+  const active = focusName === name
+  const common = {
+    name, required,
+    placeholder,
+    onFocus: () => setFocusName(name),
+    onBlur: () => setFocusName(null),
+    className: 'peer w-full bg-transparent border-0 outline-none py-3 text-lg text-white placeholder-white/30 caret-white',
+  }
+  return (
+    <label className="block relative">
+      <span className="font-boska-bold text-lg md:text-xl text-white/90">{label}</span>
+      <div className="relative mt-2">
+        {textarea ? (
+          <textarea rows={4} {...common} />
+        ) : (
+          <input type={type} {...common} />
+        )}
+        <span className="absolute left-0 right-0 bottom-0 h-px bg-white/15" />
+        <span className={`absolute left-0 bottom-0 h-px bg-white transition-all duration-500 ${active ? 'w-full' : 'w-0'}`} />
+      </div>
+    </label>
+  )
 }
