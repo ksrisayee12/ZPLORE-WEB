@@ -1,5 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const BEATS = [
   { stat: '2021', label: 'Founded', text: 'Started as a two-person research collective.' },
@@ -14,54 +18,49 @@ export default function About() {
   const textRefs = useRef([])
 
   useEffect(() => {
-    let cleanup
-    ; (async () => {
-      const { default: gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-      const ctx = gsap.context(() => {
-        // pin and progress
-        const total = BEATS.length
-        const st = ScrollTrigger.create({
-          trigger: ref.current,
-          start: 'top top',
-          end: '+=' + (total * 100) + '%',
-          pin: true,
-          scrub: 0.6,
-          onUpdate: (s) => {
-            const p = s.progress
-            // drive Z geometry build
-            const segments = zRef.current.querySelectorAll('path.zseg, line.zseg, polygon.zface')
-            segments.forEach((el, i) => {
-              const start = i / segments.length
-              const end = (i + 1) / segments.length
-              const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
-              el.setAttribute('opacity', (local * 0.95).toFixed(3))
-              if (el.dataset && el.dataset.length) {
-                const L = parseFloat(el.dataset.length)
-                el.setAttribute('stroke-dashoffset', (L * (1 - local)).toFixed(2))
-              }
-            })
-            // rotate Z group
-            const g = zRef.current.querySelector('g.zgroup')
-            if (g) g.setAttribute('transform', `translate(250 250) rotate(${p * 60}) translate(-250 -250)`)
-            // text beats
-            textRefs.current.forEach((t, i) => {
-              if (!t) return
-              const start = i / total
-              const end = (i + 1) / total
-              const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
-              const fadeIn = gsap.utils.clamp(0, 1, local * 3)
-              const fadeOut = i === total - 1 ? 1 : gsap.utils.clamp(0, 1, 1 - (local - 0.75) * 4)
-              t.style.opacity = (fadeIn * fadeOut).toString()
-              t.style.transform = `translateY(${(1 - fadeIn) * 40}px)`
-            })
-          }
-        })
-      }, ref)
-      cleanup = () => ctx.revert()
-    })()
-    return () => cleanup && cleanup()
+    const ctx = gsap.context(() => {
+      // pin and progress
+      const total = BEATS.length
+      const st = ScrollTrigger.create({
+        trigger: ref.current,
+        start: 'top top',
+        end: '+=' + (total * 100) + '%',
+        pin: true,
+        refreshPriority: 10,
+        scrub: 0.6,
+        onUpdate: (s) => {
+          const p = s.progress
+          // drive Z geometry build
+          const segments = zRef.current.querySelectorAll('path.zseg, line.zseg, polygon.zface')
+          segments.forEach((el, i) => {
+            const start = i / segments.length
+            const end = (i + 1) / segments.length
+            const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
+            el.setAttribute('opacity', (local * 0.95).toFixed(3))
+            if (el.dataset && el.dataset.length) {
+              const L = parseFloat(el.dataset.length)
+              el.setAttribute('stroke-dashoffset', (L * (1 - local)).toFixed(2))
+            }
+          })
+          // rotate Z group
+          const g = zRef.current.querySelector('g.zgroup')
+          if (g) g.setAttribute('transform', `translate(250 250) rotate(${p * 60}) translate(-250 -250)`)
+          // text beats
+          textRefs.current.forEach((t, i) => {
+            if (!t) return
+            const start = i / total
+            const end = (i + 1) / total
+            const local = gsap.utils.clamp(0, 1, (p - start) / (end - start))
+            const fadeIn = gsap.utils.clamp(0, 1, local * 3)
+            const fadeOut = i === total - 1 ? 1 : gsap.utils.clamp(0, 1, 1 - (local - 0.75) * 4)
+            t.style.opacity = (fadeIn * fadeOut).toString()
+            t.style.transform = `translateY(${(1 - fadeIn) * 40}px)`
+          })
+        }
+      })
+    }, ref)
+
+    return () => ctx.revert()
   }, [])
 
   // Build a Z made of stacked stroked segments + facets

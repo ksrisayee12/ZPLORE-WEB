@@ -177,6 +177,42 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'AuthorLight';
+  src: url('/fonts/Author-Light.woff2') format('woff2'),
+       url('/fonts/Author-Light.woff') format('woff');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AuthorLightItalic';
+  src: url('/fonts/Author-LightItalic.woff2') format('woff2'),
+       url('/fonts/Author-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AuthorExtralight';
+  src: url('/fonts/Author-Extralight.woff2') format('woff2'),
+       url('/fonts/Author-Extralight.woff') format('woff');
+  font-weight: 200;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'QuilonRegular';
+  src: url('/fonts/Quilon-Regular.woff2') format('woff2'),
+       url('/fonts/Quilon-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -233,6 +269,10 @@ body {
 .font-zodiac-light { font-family: 'Zodiak', 'Boska', 'Georgia', serif; font-weight: 300; letter-spacing: -0.01em; }
 .font-quilon { font-family: 'Quilon Medium', 'Georgia', serif; font-weight: 500; letter-spacing: -0.01em; }
 .font-quilon-medium { font-family: 'Quilon Medium', 'Georgia', serif; font-weight: 500; letter-spacing: -0.01em; }
+.font-quilon-regular { font-family: 'QuilonRegular', 'Georgia', serif; font-weight: 400; letter-spacing: -0.01em; }
+.font-author-light { font-family: 'AuthorLight', 'Inter', sans-serif; font-weight: 300; letter-spacing: -0.01em; }
+.font-author-extralight { font-family: 'AuthorExtralight', 'Inter', sans-serif; font-weight: 200; letter-spacing: -0.01em; }
+.font-author-light-italic { font-family: 'AuthorLightItalic', 'Inter', sans-serif; font-weight: 300; font-style: italic; letter-spacing: -0.01em; }
 .font-qanelas-soft { font-family: 'Qanelas Soft', 'Inter', sans-serif; font-weight: 400; letter-spacing: -0.01em; }
 .font-montreal { font-family: 'Montreal', 'Neue Montreal', 'PP Neue Montreal', 'Inter', -apple-system, sans-serif; font-weight: 400; letter-spacing: -0.01em; }
 .font-fluid-box-reposition { font-family: 'Fluid box reposition', 'Nohemi', 'Inter', sans-serif; }

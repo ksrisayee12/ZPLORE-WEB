@@ -168,11 +168,8 @@ export default function TheWayWeBuild() {
             ref={rightContainerRef}
             className="lg:col-span-6 flex flex-col justify-center lg:border-l lg:border-white/[0.08] lg:pl-10 pt-8 lg:pt-0"
           >
-            <p className="font-zodiac text-2xl md:text-3xl text-white/95 leading-[1.3] mb-8">
+            <p className="font-quilon-regular text-2xl md:text-3xl text-white/95 leading-[1.3]">
               Every system we build carries the same intent — make intelligence useful, make software matter.
-            </p>
-            <p className="font-zodiac-light text-base md:text-xl text-white/60 leading-relaxed">
-              Zplore exists at the intersection of engineering and imagination — building products that solve real problems and a community that keeps solving them.
             </p>
           </div>
         </div>

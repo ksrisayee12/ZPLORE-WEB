@@ -1,6 +1,10 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const PROGRAMS = [
   { tag: 'Mentorship', title: 'Founder × engineer pairings.', body: 'Six-month structured mentorship with senior Zplore staff. Code reviews, architecture clinics, career roadmapping.', n: '01' },
@@ -26,23 +30,20 @@ export default function CommunityPage() {
   const charsRef = useRef([])
 
   useEffect(() => {
-    let cleanup
-    ; (async () => {
-      const { default: gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-      const ctx = gsap.context(() => {
-        gsap.fromTo(charsRef.current, { y: '120%', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.02, duration: 1, ease: 'expo.out' })
-        gsap.utils.toArray('.cprog').forEach((el, i) => {
-          gsap.fromTo(el, { y: 60, opacity: 0 }, {
-            y: 0, opacity: 1, duration: 0.9, ease: 'expo.out',
-            scrollTrigger: { trigger: el, start: 'top 88%' }
-          })
+    const validChars = charsRef.current.filter(Boolean)
+    const ctx = gsap.context(() => {
+      if (validChars.length) {
+        gsap.fromTo(validChars, { y: '120%', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.02, duration: 1, ease: 'expo.out' })
+      }
+      gsap.utils.toArray('.cprog').forEach((el) => {
+        gsap.fromTo(el, { y: 60, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.9, ease: 'expo.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' }
         })
-      }, heroRef)
-      cleanup = () => ctx.revert()
-    })()
-    return () => cleanup && cleanup()
+      })
+    }, heroRef)
+
+    return () => ctx.revert()
   }, [])
 
   const title = 'A builder ecosystem.'

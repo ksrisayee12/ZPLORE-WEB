@@ -11,13 +11,13 @@ const faqItems = [
     number: '01',
     question: 'Who is Zplore?',
     answer:
-      'Zplore is an innovation ecosystem that builds AI products, enterprise software, and developer platforms—while growing a community where builders learn, collaborate, and turn ideas into real products.',
+      'Zplore is an innovation ecosystem that builds AI products, enterprise software, and developer platforms — while growing a community where builders learn, collaborate, and turn ideas into real products.',
   },
   {
     number: '02',
     question: 'Can you modernize existing software?',
     answer:
-      'Yes. We assess your existing systems, identify what should be preserved, and redesign what limits growth—extending your technology without disrupting the business that depends on it.',
+      'Yes. We assess your existing systems, identify what should be preserved, and redesign what limits growth — extending your technology without disrupting the business that depends on it.',
   },
   {
     number: '03',
@@ -30,7 +30,7 @@ const faqItems = [
     question:
       'If our systems are spread across different platforms, can you still connect everything?',
     answer:
-      'Yes. We begin by understanding your existing architecture, then engineer the integration layer that allows your platforms to work as a unified system—without forcing unnecessary migrations.',
+      'Yes. We begin by understanding your existing architecture, then engineer the integration layer that allows your platforms to work as a unified system — without forcing unnecessary migrations.',
   },
   {
     number: '05',
@@ -97,6 +97,41 @@ export default function FAQ() {
           },
         }
       )
+
+      // Bottom quote entrance
+      const quoteWords = gsap.utils.toArray('.faq-quote-word')
+      gsap.fromTo(
+        quoteWords,
+        { opacity: 0, y: 30, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 1,
+          stagger: 0.04,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.faq-bottom-quote',
+            start: 'top 85%',
+          },
+        }
+      )
+
+      // CTA link entrance
+      gsap.fromTo(
+        '.faq-cta-link',
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.faq-cta-link',
+            start: 'top 90%',
+          },
+        }
+      )
     }, sectionRef)
 
     return () => ctx.revert()
@@ -153,8 +188,7 @@ export default function FAQ() {
     }
   }
 
-  const statementText = "Every product we've built started as a question worth asking."
-  const bringText = "Bring yours."
+  const statementText = "Beneath Every Breakthrough / Is a System We Built"
 
   return (
     <section
@@ -172,13 +206,13 @@ export default function FAQ() {
       />
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-10">
-        {/* Section Header — Left Top Compact Heading */}
+        {/* Section Header — Clean FAQ Title */}
         <div className="max-w-4xl mb-14 md:mb-16 text-left">
           <div className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4 font-excon">
             Inquiry & Architecture
           </div>
-          <h2 className="font-clash-display-medium text-3xl md:text-5xl tracking-tight leading-[1.15] mb-3 flex flex-wrap justify-start">
-            {statementText.split(' ').map((word, idx) => (
+          <h2 className="font-clash-display-medium text-3xl md:text-5xl tracking-tight leading-[1.15] flex flex-wrap justify-start">
+            {'Frequently Asked Questions'.split(' ').map((word, idx) => (
               <span
                 key={idx}
                 className="faq-header-word inline-block mr-[0.26em] py-1"
@@ -188,17 +222,6 @@ export default function FAQ() {
               </span>
             ))}
           </h2>
-          <div className="font-clash-display-medium text-xl md:text-3xl text-white/80 flex flex-wrap justify-start">
-            {bringText.split(' ').map((word, idx) => (
-              <span
-                key={idx}
-                className="faq-header-word inline-block mr-[0.26em] py-1 text-white"
-                style={{ opacity: 0 }}
-              >
-                {word}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* FAQ List Container */}
@@ -252,7 +275,7 @@ export default function FAQ() {
 
                     {/* Question Title */}
                     <h3
-                      className={`font-zodiac text-2xl md:text-4xl lg:text-[42px] leading-tight transition-all duration-500 flex-1 ${
+                      className={`font-zodiac text-xl md:text-3xl lg:text-[34px] leading-tight transition-all duration-500 flex-1 ${
                         isActive
                           ? 'text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.35)]'
                           : isOtherActive
@@ -306,7 +329,7 @@ export default function FAQ() {
                   style={{ clipPath: 'inset(0 0 100% 0)' }}
                 >
                   <div className="pt-6 md:pt-8 pl-12 md:pl-20 pr-6 md:pr-16 max-w-4xl">
-                    <p className="font-zodiac-light text-base md:text-xl lg:text-2xl text-white/80 leading-relaxed tracking-normal">
+                    <p className="font-zodiac-light text-sm md:text-lg lg:text-xl text-white/80 leading-relaxed tracking-normal">
                       {item.answer}
                     </p>
                   </div>
@@ -314,6 +337,47 @@ export default function FAQ() {
               </div>
             )
           })}
+        </div>
+
+        {/* Bottom Quote — After FAQ items */}
+        <div className="faq-bottom-quote mt-20 md:mt-28 mb-6 text-center max-w-4xl mx-auto">
+          <h3 className="font-quilon-medium text-2xl md:text-4xl lg:text-5xl tracking-tight leading-[1.25] flex flex-col items-center justify-center gap-1 md:gap-2">
+            {statementText.split(' / ').map((line, lineIdx) => (
+              <div key={lineIdx} className="flex flex-wrap justify-center">
+                {line.split(' ').map((word, idx) => (
+                  <span
+                    key={`${lineIdx}-${idx}`}
+                    className="faq-quote-word inline-block mr-[0.26em] py-1"
+                    style={{ opacity: 0 }}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </h3>
+
+          {/* CTA Link to Contact Page */}
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault()
+              if (window.__lenis) {
+                window.__lenis.scrollTo('#contact', { offset: -40, duration: 1.2 })
+              } else {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+              }
+            }}
+            className="faq-cta-link inline-flex items-center gap-3 mt-8 group cursor-pointer"
+            style={{ opacity: 0 }}
+          >
+            <span className="font-clash-display-medium text-lg md:text-2xl text-white/80 group-hover:text-white transition-colors duration-500 tracking-tight">
+              Start Building With Us
+            </span>
+            <span className="text-white/60 group-hover:text-white group-hover:translate-x-1.5 transition-all duration-500 text-xl">
+              →
+            </span>
+          </a>
         </div>
       </div>
     </section>

@@ -1,12 +1,12 @@
 'use client';
+import { useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Footer — reconstructed from reference HTML footer block.
- *
- * Structure:
- * - Top: Logo left, nav links right
- * - Middle: large display text (byline or coordinates)
- * - Bottom: copyright, coordinates, build info
  */
 
 const footerLinks = {
@@ -17,9 +17,33 @@ const footerLinks = {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const footerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.footer-display-zplore',
+        { scale: 0.25, opacity: 0, y: 60, filter: 'blur(15px)' },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 1.35,
+          ease: 'back.out(1.7)',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top 85%',
+          },
+        }
+      );
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <footer className="relative w-full bg-[#050505] border-t border-white/10">
+    <footer ref={footerRef} className="relative w-full bg-[#050505] border-t border-white/10 overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-6 md:px-10">
         {/* Top grid */}
         <div className="py-16 md:py-24 grid md:grid-cols-12 gap-12">
@@ -65,7 +89,7 @@ export default function Footer() {
 
         {/* Divider + large display text */}
         <div className="py-10 border-t border-white/10">
-          <div className="display text-[14vw] md:text-[8vw] text-white/10 leading-none text-center select-none pointer-events-none">
+          <div className="footer-display-zplore display text-[14vw] md:text-[8vw] text-white/10 leading-none text-center select-none pointer-events-none" style={{ opacity: 0 }}>
             Zplore
           </div>
         </div>

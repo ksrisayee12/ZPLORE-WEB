@@ -52,7 +52,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" ref={ref} className="relative w-full bg-[#050505] py-32 md:py-44 overflow-hidden">
+    <section id="contact" ref={ref} className="relative w-full bg-[#050505] py-20 md:py-28 overflow-hidden">
       <div ref={lightRef} className="absolute inset-0 pointer-events-none transition-[background] duration-300" />
       {/* depth field */}
       <div className="absolute inset-0 pointer-events-none">

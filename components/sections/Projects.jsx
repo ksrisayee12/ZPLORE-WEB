@@ -160,33 +160,10 @@ function useTiltEffect(ref) {
   }, [ref]);
 }
 
-/* ── Scroll-triggered reveal animation per card ── */
+/* ── Scroll-triggered reveal animation per card (disabled — master timeline handles this) ── */
 function useScrollReveal(ref, index, delay = 0) {
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 60, scale: 0.96 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.2,
-          delay: delay + index * 0.08,
-          ease: 'expo.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-    }, el);
-
-    return () => ctx.revert();
-  }, [ref, index, delay]);
+  // Intentionally empty — individual card reveal is now handled
+  // by the master timeline in Projects to avoid double-animation blink
 }
 
 /* ── Individual card component with cinematic animations ── */
@@ -271,7 +248,7 @@ export default function Projects() {
         scrollTrigger: {
           trigger: section,
           start: 'top 75%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         },
       });
 
@@ -282,7 +259,6 @@ export default function Projects() {
         duration: 1.4,
         stagger: 0.06,
         ease: 'expo.out',
-        clearProps: 'all',
       });
     }, section);
 

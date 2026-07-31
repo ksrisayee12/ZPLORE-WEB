@@ -1,5 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const NODES = [
   { id: 'edge', label: 'Edge', x: 80, y: 120 },
@@ -24,54 +28,48 @@ export default function Enterprise() {
   const svgRef = useRef(null)
 
   useEffect(() => {
-    let cleanup
-    ; (async () => {
-      const { default: gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-      const ctx = gsap.context(() => {
-        const paths = svgRef.current.querySelectorAll('path.edge')
-        const nodes = svgRef.current.querySelectorAll('g.node')
-        const pulses = svgRef.current.querySelectorAll('circle.pulse')
+    const ctx = gsap.context(() => {
+      const paths = svgRef.current.querySelectorAll('path.edge')
+      const nodes = svgRef.current.querySelectorAll('g.node')
+      const pulses = svgRef.current.querySelectorAll('circle.pulse')
 
-        paths.forEach(p => {
-          const len = p.getTotalLength()
-          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len })
-        })
-        gsap.set(nodes, { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' })
-        gsap.set(pulses, { opacity: 0 })
+      paths.forEach(p => {
+        const len = p.getTotalLength()
+        gsap.set(p, { strokeDasharray: len, strokeDashoffset: len })
+      })
+      gsap.set(nodes, { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' })
+      gsap.set(pulses, { opacity: 0 })
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ref.current,
-            start: 'top 70%',
-            end: 'bottom top',
-            scrub: 0.8,
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ref.current,
+          start: 'top 70%',
+          end: 'bottom top',
+          scrub: 0.8,
+        }
+      })
+      tl.to(paths, { strokeDashoffset: 0, duration: 1, stagger: 0.04, ease: 'power2.inOut' }, 0)
+        .to(nodes, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.05, ease: 'expo.out' }, 0.2)
+        .to(pulses, { opacity: 1, duration: 0.2 }, 0.6)
+
+      // continuous light pulse animation across edges (independent of scroll)
+      pulses.forEach((p, i) => {
+        const edge = paths[i % paths.length]
+        const len = edge.getTotalLength()
+        gsap.to({}, {
+          duration: 2.4 + (i % 3) * 0.6,
+          repeat: -1,
+          ease: 'none',
+          onUpdate: function () {
+            const pt = edge.getPointAtLength(this.progress() * len)
+            p.setAttribute('cx', pt.x)
+            p.setAttribute('cy', pt.y)
           }
         })
-        tl.to(paths, { strokeDashoffset: 0, duration: 1, stagger: 0.04, ease: 'power2.inOut' }, 0)
-          .to(nodes, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.05, ease: 'expo.out' }, 0.2)
-          .to(pulses, { opacity: 1, duration: 0.2 }, 0.6)
+      })
+    }, ref)
 
-        // continuous light pulse animation across edges (independent of scroll)
-        pulses.forEach((p, i) => {
-          const edge = paths[i % paths.length]
-          const len = edge.getTotalLength()
-          gsap.to({}, {
-            duration: 2.4 + (i % 3) * 0.6,
-            repeat: -1,
-            ease: 'none',
-            onUpdate: function () {
-              const pt = edge.getPointAtLength(this.progress() * len)
-              p.setAttribute('cx', pt.x)
-              p.setAttribute('cy', pt.y)
-            }
-          })
-        })
-      }, ref)
-      cleanup = () => ctx.revert()
-    })()
-    return () => cleanup && cleanup()
+    return () => ctx.revert()
   }, [])
 
   const nodeById = (id) => NODES.find(n => n.id === id)

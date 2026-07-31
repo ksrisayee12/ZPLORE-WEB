@@ -1,5 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const STEPS = [
   { n: '01', title: 'Discovery Sprint', body: 'Two-week sprint. Stakeholder interviews, technical audit, opportunity map, and a working proof-of-concept.' },
@@ -15,65 +19,59 @@ export default function Services() {
   const pathRef = useRef(null)
 
   useEffect(() => {
-    let cleanup
-    ; (async () => {
-      const { default: gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-      const ctx = gsap.context(() => {
-        const distance = () => track.current.scrollWidth - window.innerWidth + 80
-        const tween = gsap.to(track.current, {
-          x: () => -distance(),
+    const ctx = gsap.context(() => {
+      const distance = () => track.current.scrollWidth - window.innerWidth + 80
+      const tween = gsap.to(track.current, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: wrap.current,
+          start: 'top top',
+          end: () => '+=' + distance(),
+          scrub: 0.8,
+          pin: true,
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+          refreshPriority: 15,
+        },
+      })
+      // animate path
+      if (pathRef.current) {
+        const len = pathRef.current.getTotalLength()
+        gsap.set(pathRef.current, { strokeDasharray: len, strokeDashoffset: len })
+        gsap.to(pathRef.current, {
+          strokeDashoffset: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: wrap.current,
             start: 'top top',
             end: () => '+=' + distance(),
             scrub: 0.8,
-            pin: true,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-            refreshPriority: 15,
-          },
-        })
-        // animate path
-        if (pathRef.current) {
-          const len = pathRef.current.getTotalLength()
-          gsap.set(pathRef.current, { strokeDasharray: len, strokeDashoffset: len })
-          gsap.to(pathRef.current, {
-            strokeDashoffset: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: wrap.current,
-              start: 'top top',
-              end: () => '+=' + distance(),
-              scrub: 0.8,
-            }
-          })
-        }
-        // active step (closest to center)
-        const nodes = gsap.utils.toArray('.svc-node')
-        ScrollTrigger.create({
-          trigger: wrap.current,
-          start: 'top top',
-          end: () => '+=' + distance(),
-          scrub: true,
-          onUpdate: (st) => {
-            const p = st.progress
-            nodes.forEach((n, i) => {
-              const center = i / (nodes.length - 1)
-              const dist = Math.abs(p - center)
-              const active = dist < 0.12
-              n.style.opacity = active ? '1' : Math.max(0.25, 1 - dist * 2.2).toFixed(2)
-              n.style.transform = `scale(${active ? 1 : 0.92}) translateY(${active ? 0 : 6}px)`
-              n.style.filter = active ? 'blur(0)' : `blur(${Math.min(4, dist * 6)}px)`
-            })
           }
         })
-      }, wrap)
-      cleanup = () => ctx.revert()
-    })()
-    return () => cleanup && cleanup()
+      }
+      // active step (closest to center)
+      const nodes = gsap.utils.toArray('.svc-node')
+      ScrollTrigger.create({
+        trigger: wrap.current,
+        start: 'top top',
+        end: () => '+=' + distance(),
+        scrub: true,
+        onUpdate: (st) => {
+          const p = st.progress
+          nodes.forEach((n, i) => {
+            const center = i / (nodes.length - 1)
+            const dist = Math.abs(p - center)
+            const active = dist < 0.12
+            n.style.opacity = active ? '1' : Math.max(0.25, 1 - dist * 2.2).toFixed(2)
+            n.style.transform = `scale(${active ? 1 : 0.92}) translateY(${active ? 0 : 6}px)`
+            n.style.filter = active ? 'blur(0)' : `blur(${Math.min(4, dist * 6)}px)`
+          })
+        }
+      })
+    }, wrap)
+
+    return () => ctx.revert()
   }, [])
 
   return (

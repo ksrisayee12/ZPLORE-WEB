@@ -13,6 +13,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <link rel="preload" href="/fonts/ClashDisplay-Semibold.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/ClashDisplay-Semibold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{__html:'window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);'}} />
       </head>
       <body className="grain">

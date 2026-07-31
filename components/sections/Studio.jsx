@@ -1,6 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const BL = ({ children }) => (
   <span className="serif italic font-normal">{children}</span>
@@ -47,41 +51,34 @@ export default function Studio() {
   const stepsRef = useRef([])
 
   useEffect(() => {
-    let cleanup
-    ; (async () => {
-      const { default: gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
+    const ctx = gsap.context(() => {
+      const total = STATEMENTS.length
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ref.current,
+          start: 'top top',
+          end: '+=' + (total * 100) + '%',
+          scrub: 0.6,
+          pin: true,
+          pinSpacing: true,
+          refreshPriority: 20,
+        },
+      })
 
-      const ctx = gsap.context(() => {
-        const total = STATEMENTS.length
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ref.current,
-            start: 'top top',
-            end: '+=' + (total * 100) + '%',
-            scrub: 0.6,
-            pin: true,
-            pinSpacing: true,
-            refreshPriority: 20,
-          },
-        })
+      stepsRef.current.forEach((step, i) => {
+        if (!step) return
+        gsap.set(step, { autoAlpha: i === 0 ? 1 : 0, y: i === 0 ? 0 : 60 })
+      })
 
-        stepsRef.current.forEach((step, i) => {
-          if (!step) return
-          gsap.set(step, { autoAlpha: i === 0 ? 1 : 0, y: i === 0 ? 0 : 60 })
-        })
+      STATEMENTS.forEach((_, i) => {
+        if (i === 0) return
+        tl.to(stepsRef.current[i - 1], { autoAlpha: 0, y: -60, duration: 0.5 }, i - 0.5)
+          .fromTo(stepsRef.current[i], { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.5 }, i - 0.5)
+        tl.to(visualRef.current, { rotateY: i * 90, rotateX: i * 20, scale: 1 + i * 0.05, duration: 1 }, i - 1)
+      })
+    }, ref)
 
-        STATEMENTS.forEach((_, i) => {
-          if (i === 0) return
-          tl.to(stepsRef.current[i - 1], { autoAlpha: 0, y: -60, duration: 0.5 }, i - 0.5)
-            .fromTo(stepsRef.current[i], { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.5 }, i - 0.5)
-          tl.to(visualRef.current, { rotateY: i * 90, rotateX: i * 20, scale: 1 + i * 0.05, duration: 1 }, i - 1)
-        })
-      }, ref)
-      cleanup = () => ctx.revert()
-    })()
-    return () => cleanup && cleanup()
+    return () => ctx.revert()
   }, [])
 
   return (
